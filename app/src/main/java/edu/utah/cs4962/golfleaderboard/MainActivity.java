@@ -119,4 +119,9 @@ public class MainActivity extends Activity
         Toast.makeText(this, "You clicked the create account button!", Toast.LENGTH_SHORT).show();
     }
 
+    public void launchCreateAccount()
+    {
+
+    }
+
 }
