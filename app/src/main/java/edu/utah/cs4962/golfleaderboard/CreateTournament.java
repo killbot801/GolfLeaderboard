@@ -22,21 +22,20 @@ public class CreateTournament extends Activity
     int mYear = c.get(Calendar.YEAR);
     int mMonth = c.get(Calendar.MONTH);
     int mDay = c.get(Calendar.DAY_OF_MONTH);
-    EditText tournyStartDateSet = (EditText) findViewById(R.id.tournyStartDateSet);
-    EditText tournyEndDateValue = (EditText) findViewById(R.id.tournyEndDateValue);
+    EditText _tournyStartDateSet;
+    EditText _passcodeValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_tournament);
-        findViewById(R.id.tournyEndDateValue).setVisibility(View.INVISIBLE);
-        findViewById(R.id.endDateButton).setVisibility(View.VISIBLE);
+        setupGlobals();
         findViewById(R.id.startDateButton).setVisibility(View.VISIBLE);
         findViewById(R.id.tournyStartDateSet).setVisibility(View.INVISIBLE);
     }
 
-    public void openStartDatePicker()
+    public void openStartDatePicker(View view)
     {
         DatePickerDialog dpd = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener()
@@ -46,8 +45,8 @@ public class CreateTournament extends Activity
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth)
                     {
-                        tournyStartDateSet.setText(dayOfMonth + "-"
-                                + (monthOfYear + 1) + "-" + year);
+                        _tournyStartDateSet.setText(year + "-"
+                                + (monthOfYear + 1) + "-" + dayOfMonth);
 
                     }
                 }, mYear, mMonth, mDay);
@@ -58,34 +57,17 @@ public class CreateTournament extends Activity
         findViewById(R.id.tournyStartDateSet).setVisibility(View.VISIBLE);
     }
 
-    public void openEndDatePicker()
+    public void setupGlobals()
     {
-        DatePickerDialog dpd = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener()
-                {
-
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth)
-                    {
-                        tournyEndDateValue.setText(dayOfMonth + "-"
-                                + (monthOfYear + 1) + "-" + year);
-
-                    }
-                }, mYear, mMonth, mDay);
-
-        dpd.show();
-
-        findViewById(R.id.tournyEndDateValue).setVisibility(View.VISIBLE);
-        findViewById(R.id.endDateButton).setVisibility(View.INVISIBLE);
+        _tournyStartDateSet = (EditText) findViewById(R.id.tournyStartDateSet);
+        _passcodeValue = (EditText)findViewById(R.id.passcodeValue);
     }
 
-    public void generatePasscode()
+    public void generatePasscode(View view)
     {
         String newPassword = UUID.randomUUID().toString();
         newPassword = newPassword.substring(0, 8);
-        EditText passVal = (EditText)findViewById(R.id.passcodeValue);
-        passVal.setText(newPassword);
+        _passcodeValue.setText(newPassword);
     }
 
     public void submitTournament()

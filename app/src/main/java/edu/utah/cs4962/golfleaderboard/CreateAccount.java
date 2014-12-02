@@ -67,11 +67,11 @@ public class CreateAccount extends Activity
 
     public void validateUserData(View view)
     {
-        setupGlobals();
+        _userNameTaken.setVisibility(View.INVISIBLE);
 
         NetworkRequests nr = NetworkRequests.getNetworkRequestInstance();
         Pair<Boolean, String> createResponse = nr.createUser(_userName.getText().toString(), _password.getText().toString(),
-                _firstName.getText().toString(), _lastName.getText().toString(), _city.toString(), _state.getText().toString(), _email.getText().toString());
+                _firstName.getText().toString(), _lastName.getText().toString(), _city.getText().toString(), _state.getText().toString(), _email.getText().toString());
 
         if(createResponse.first)
         {

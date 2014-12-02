@@ -3,6 +3,7 @@ package edu.utah.cs4962.golfleaderboard;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 /**
@@ -17,12 +18,12 @@ public class CreateJoinTournament extends Activity
         setContentView(R.layout.tournament_join_create);
     }
 
-    public void launchJoinTournament()
+    public void launchJoinTournament(View view)
     {
         Toast.makeText(this, "You clicked the join tournament button!", Toast.LENGTH_SHORT).show();
     }
 
-    public void launchCreateTournament()
+    public void launchCreateTournament(View view)
     {
         Toast.makeText(this, "You clicked the create tournament button!", Toast.LENGTH_SHORT).show();
         openCreateTournament();
