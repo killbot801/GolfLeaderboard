@@ -128,4 +128,95 @@ public class NetworkRequests
             return new Pair<Boolean, String>(false, "Error: Could not authenticate login.");
         }
     }
+
+    public Pair<Boolean, String> createUser(final String userName, final String userPass, final String firstName, final String lastName, final String city, final String state, final String email)
+    {
+        AsyncTask<String, Integer, Pair<Boolean, String>> createUser = new AsyncTask<String, Integer, Pair<Boolean, String>>()
+        {
+            @Override
+            protected Pair<Boolean, String> doInBackground(String... params)
+            {
+                String contentString = "";
+                Pair<Boolean, String> addUserStatus;
+
+                try
+                {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpPost request = new HttpPost("http://www.memnochdacoder.com/newPlayer");
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.accumulate("UserName", userName);
+                    jsonObject.accumulate("Password", userPass);
+                    jsonObject.accumulate("FirstName", firstName);
+                    jsonObject.accumulate("LastName", lastName);
+                    jsonObject.accumulate("City", city);
+                    jsonObject.accumulate("State", state);
+                    jsonObject.accumulate("Email", email);
+
+                    String json = jsonObject.toString();
+
+                    request.setEntity(new StringEntity(json));
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    HttpResponse response = client.execute(request);
+
+                    InputStream content = response.getEntity().getContent();
+
+                    BufferedReader httpReader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+
+                    while ((line = httpReader.readLine()) != null)
+                        contentString += line;
+
+                    try
+                    {
+                        if (contentString.length() <= 0)
+                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+
+                        JsonElement ele = new JsonParser().parse(contentString);
+                        JsonObject obj = ele.getAsJsonObject();
+                        Boolean boolToggle = obj.get("Success").getAsBoolean();
+                        String authMessage = obj.get("Message").getAsString();
+
+                        addUserStatus = new Pair<Boolean, String>(boolToggle, authMessage);
+
+                        return addUserStatus;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Add New User: ", "Exception found during JSON conversion.");
+                        e.printStackTrace();
+                        addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                        return addUserStatus;
+                    }
+                }
+                catch (IOException e)
+                {
+                    Log.i("Add New User: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                    return addUserStatus;
+                }
+                catch (JSONException e)
+                {
+                    Log.i("Add New User: ", "Exception found during JSON setup.");
+                    e.printStackTrace();
+                    addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                    return addUserStatus;
+                }
+            }
+        };
+
+        createUser.execute();
+
+        try
+        {
+            return createUser.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Add New User: ", "There was an error authenticating the login.");
+            e.printStackTrace();
+            return new Pair<Boolean, String>(false, "Error: Could not authenticate login.");
+        }
+    }
 }

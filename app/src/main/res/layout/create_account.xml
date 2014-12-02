@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:text="@string/userName"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/userNameText"
         android:layout_below="@+id/userNameText"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:text="@string/passWord"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/passwordText"
         android:layout_below="@+id/passwordText"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:text="@string/fName"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/nameTextView"
         android:layout_below="@+id/nameTextView"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:text="@string/lName"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/lastNameTextView"
         android:layout_below="@+id/lastNameTextView"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:text="@string/cityText"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -121,12 +121,34 @@
     </EditText>
 
     <TextView
-        android:id="@+id/emailText"
+        android:id="@+id/stateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/cityText"
         android:layout_below="@+id/cityText"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/stateText"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <EditText
+        android:id="@+id/stateEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/stateText"
+        android:layout_alignLeft="@+id/lastNameTextEntry"
+        android:layout_alignRight="@+id/lastNameTextEntry"
+        android:hint="State">
+
+        <requestFocus/>
+    </EditText>
+
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/stateText"
+        android:layout_below="@+id/stateText"
+        android:layout_marginTop="25dp"
         android:text="@string/emailText"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -135,8 +157,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/emailText"
-        android:layout_alignLeft="@+id/lastNameTextEntry"
-        android:layout_alignRight="@+id/lastNameTextEntry"
+        android:layout_alignLeft="@+id/stateEntry"
+        android:layout_alignRight="@+id/stateEntry"
         android:hint="Email">
 
         <requestFocus/>
@@ -149,9 +171,10 @@
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="0dp"
         android:text="That username is taken, please try another."
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFF0000"
         android:visibility="invisible"/>
 
     <Button

@@ -20,5 +20,6 @@
     <string name="tournyStartDateLabel">Tournament\nStart Date:</string>
     <string name="tournyEndDateLabel">Tournament\nEnd Date:</string>
     <string name="passcodeLabel">Enter Passcode:</string>
+    <string name="stateText">State:</string>
 
 </resources>
