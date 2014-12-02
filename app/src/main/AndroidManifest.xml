@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.utah.cs4962.golfleaderboard" >
+          package="edu.utah.cs4962.golfleaderboard" >
 
     <application
         android:allowBackup="true"
@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".CreateAccount"
+                  android:label="@string/createAccount"/>
+        <activity android:name=".CreateJoinTournament"
+                  android:label="Create/Join Tournament"/>
+        <activity android:name=".CreateTournament"
+                  android:label="Create Tournament"/>
+        <activity android:name=".SetupTournamentValues"
+                  android:label="Setup Tournament Value"/>
     </application>
 
 </manifest>

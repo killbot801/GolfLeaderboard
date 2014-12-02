@@ -112,7 +112,7 @@
         android:layout_centerHorizontal="true"
         android:clickable="true"
         android:enabled="true"
-        android:onClick="createAccount"
+        android:onClick="launchCreateAccount"
         android:text="Create Account ..."
         android:textColor="#ff3452ff"
         android:textColorHighlight="#ff030bff"/>

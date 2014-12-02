@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context="edu.utah.cs4962.golfleaderboard.SetupTournamentValues">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/tournamentValuesScrollView">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingBottom="@dimen/activity_vertical_margin"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        tools:context="edu.utah.cs4962.golfleaderboard.SetupTournamentValues">
+
+            <!--<TextView
+                android:id="@+id/tournamentValueHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Par Values for Tournament"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
+                <Button
+                    android:id="@+id/previousHoleButton"
+                    android:layout_width="50dp"
+                    android:layout_height="fill_parent"
+                    android:layout_below="@+id/tournamentValueHeader"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="30dp"
+                    android:onClick="openStartDatePicker"
+                    android:background="@drawable/apptheme_btn_default_normal_holo_light"
+                    android:text="<"
+                    android:clickable="true"/>
+            <EditText
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_alignBottom="@id/previousHoleButton"
+                android:layout_centerHorizontal="true"
+                />
+            <Button
+                android:id="@+id/nextHoleButton"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/tournamentValueHeader"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:onClick="openStartDatePicker"
+                android:background="@drawable/apptheme_btn_default_normal_holo_light"
+                android:text=">"
+                android:clickable="true"/>-->
+
+
+            </RelativeLayout>
+
+
+
+        </ScrollView>
+
+</RelativeLayout>

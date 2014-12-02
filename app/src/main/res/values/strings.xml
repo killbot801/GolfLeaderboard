@@ -13,5 +13,12 @@
     <string name="cityText">City:</string>
     <string name="createAccount">Create Account</string>
     <string name="lName">Last Name:</string>
+    <string name="createTournament">Create Tournament</string>
+    <string name="joinTournament">Join Tournament</string>
+    <string name="tournyNameLabel">Tournament\nName:</string>
+    <string name="tournyLocationLabel">Tournament\nLocation:</string>
+    <string name="tournyStartDateLabel">Tournament\nStart Date:</string>
+    <string name="tournyEndDateLabel">Tournament\nEnd Date:</string>
+    <string name="passcodeLabel">Enter Passcode:</string>
 
 </resources>
