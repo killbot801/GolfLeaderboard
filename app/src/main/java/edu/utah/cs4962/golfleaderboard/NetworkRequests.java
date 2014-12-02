@@ -51,7 +51,7 @@ public class NetworkRequests
             protected Pair<Boolean, String> doInBackground(String... params)
             {
                 String contentString = "";
-                Pair<Boolean, String> loginStatus = new Pair<Boolean, String>(false, "Error: Authentication failed.");
+                Pair<Boolean, String> loginStatus;
 
                 try
                 {
@@ -62,10 +62,6 @@ public class NetworkRequests
                     jsonObject.accumulate("userPass", userPass);
 
                     String json = jsonObject.toString();
-
-                    /*List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-                    nameValuePairs.add(new BasicNameValuePair("userName", userName));
-                    nameValuePairs.add(new BasicNameValuePair("userPass", userPass));*/
 
                     request.setEntity(new StringEntity(json));
                     request.setHeader("Accept", "application/json");
@@ -83,7 +79,7 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return null;
+                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
