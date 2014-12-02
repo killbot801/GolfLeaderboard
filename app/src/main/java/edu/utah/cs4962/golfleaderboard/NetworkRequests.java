@@ -13,8 +13,11 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,10 +57,19 @@ public class NetworkRequests
                 {
                     HttpClient client = new DefaultHttpClient();
                     HttpPost request = new HttpPost("http://www.memnochdacoder.com/authenticatePlayer");
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.accumulate("userName", userName);
+                    jsonObject.accumulate("userPass", userPass);
+
+                    String json = jsonObject.toString();
+
+                    /*List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
                     nameValuePairs.add(new BasicNameValuePair("userName", userName));
-                    nameValuePairs.add(new BasicNameValuePair("userPass", userPass));
-                    request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                    nameValuePairs.add(new BasicNameValuePair("userPass", userPass));*/
+
+                    request.setEntity(new StringEntity(json));
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
                     HttpResponse response = client.execute(request);
 
                     InputStream content = response.getEntity().getContent();
@@ -75,8 +87,8 @@ public class NetworkRequests
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
-                        Boolean boolToggle = obj.get("userName").getAsBoolean();
-                        String authMessage = obj.get("userPass").getAsString();
+                        Boolean boolToggle = obj.get("Success").getAsBoolean();
+                        String authMessage = obj.get("Message").getAsString();
 
                         loginStatus = new Pair<Boolean, String>(boolToggle, authMessage);
 
@@ -86,6 +98,7 @@ public class NetworkRequests
                     {
                         Log.i("Authenticate Login: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
+                        loginStatus = new Pair<Boolean, String>(false, "Authenticate Login: Exception found during JSON conversion.");
                         return loginStatus;
                     }
                 }
@@ -93,6 +106,14 @@ public class NetworkRequests
                 {
                     Log.i("Authenticate Login: ", "Exception found during HTTP request.");
                     e.printStackTrace();
+                    loginStatus = new Pair<Boolean, String>(false, "Authenticate Login: Exception found during HTTP request.");
+                    return loginStatus;
+                }
+                catch (JSONException e)
+                {
+                    Log.i("Authenticate Login: ", "Exception found during JSON setup.");
+                    e.printStackTrace();
+                    loginStatus = new Pair<Boolean, String>(false, "Authenticate Login: Exception found during JSON conversion.");
                     return loginStatus;
                 }
             }
