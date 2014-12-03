@@ -13,10 +13,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 
 public class MainActivity extends Activity
 {
-
     private EditText _username;
     private EditText _password;
     private Button _login;
@@ -24,7 +32,7 @@ public class MainActivity extends Activity
     private TextView _attemptsLeftTV;
     private TextView _numberOfRemainingLoginAttemptsTV;
     int _numberOfRemainingLoginAttempts = 3;
-
+    private String _userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,7 +41,6 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
         setupVariables();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -60,13 +67,28 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
+    public String getUserID()
+    {
+        return _userID;
+    }
+
     public void authenticateLogin(View view)
     {
         NetworkRequests nr = NetworkRequests.getNetworkRequestInstance();
         Pair<Boolean, String> authenticationCheck = nr.authenticateLogin(_username.getText().toString(), _password.getText().toString());
 
         if(authenticationCheck.first)
-            launchCreateJoin();
+        {
+            Pair<Boolean, String> userIDResponse = nr.getUserID(_username.getText().toString());
+            if(userIDResponse.first)
+            {
+                _userID = userIDResponse.second;
+                saveUserValues();
+                launchCreateJoin();
+            }
+            else
+                Toast.makeText(getApplicationContext(), userIDResponse.second, Toast.LENGTH_LONG).show();
+        }
         else
         {
             Toast.makeText(getApplicationContext(), authenticationCheck.second, Toast.LENGTH_LONG).show();
@@ -101,7 +123,7 @@ public class MainActivity extends Activity
         else
         {
             Intent intent = new Intent(this, CreateAccount.class);
-            intent.putExtra("userName", _username.getText());
+            intent.putExtra("userName", _username.getText().toString());
             startActivity(intent);
         }
     }
@@ -112,30 +134,30 @@ public class MainActivity extends Activity
         startActivity(intent);
     }
 
-}
-
-
-        /*if (_username.getText().toString().equals("admin") &&
-                _password.getText().toString().equals("admin"))
+    public void saveUserValues()
+    {
+        String fileName = "GTourny.txt";
+        try
         {
-            Toast.makeText(getApplicationContext(), "Hello admin!",
-                    Toast.LENGTH_SHORT).show();
-            launchCreateJoin();
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Seems like you 're not admin!",
-                    Toast.LENGTH_SHORT).show();
-            _numberOfRemainingLoginAttempts--;
-            _attemptsLeftTV.setVisibility(View.VISIBLE);
-            _numberOfRemainingLoginAttemptsTV.setVisibility(View.VISIBLE);
-            _numberOfRemainingLoginAttemptsTV.setText(Integer.toString(_numberOfRemainingLoginAttempts));
+            File file = new File(getApplicationContext().getFilesDir(), fileName);
 
-            if (_numberOfRemainingLoginAttempts == 0)
+            if (!file.exists())
             {
-                _login.setEnabled(false);
-                _loginLockedTV.setVisibility(View.VISIBLE);
-                _loginLockedTV.setBackgroundColor(Color.RED);
-                _loginLockedTV.setText("LOGIN LOCKED!!!");
+                BufferedWriter buffWriter = new BufferedWriter(new FileWriter(file, true));
+                Gson gson = new Gson();
+                Type type = new TypeToken<String>()
+                {
+                }.getType();
+                String json = gson.toJson(_userID, type);
+                buffWriter.write(json);
+                buffWriter.newLine();
+                buffWriter.close();
             }
-        }*/
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+}

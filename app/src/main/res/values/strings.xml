@@ -16,9 +16,68 @@
     <string name="createTournament">Create Tournament</string>
     <string name="joinTournament">Join Tournament</string>
     <string name="tournyNameLabel">Tournament\nName:</string>
-    <string name="tournyLocationLabel">Tournament\nCity:</string>
+    <string name="tournyLocationLabel">Course City:</string>
     <string name="tournyDate">Tournament\nStart Date:</string>
-    <string name="passcodeLabel">Enter Passcode:</string>
+    <string name="passcodeLabel">Enter\nPasscode:</string>
     <string name="stateText">State:</string>
+    <string name="tournyStatelabel">Course State:</string>
+    <string name="navigation_settings">Navigation</string>
+    <string name="login">Login</string>
+    <string name="new_user">Create Account</string>
+    <string name="createTourny">Create Tournament</string>
+    <string name="courseNameLabel">Course Name:</string>
+
+    <string-array name="states">
+        <item>AL</item>
+        <item>AK</item>
+        <item>AZ</item>
+        <item>AR</item>
+        <item>CA</item>
+        <item>CO</item>
+        <item>CT</item>
+        <item>DE</item>
+        <item>FL</item>
+        <item>GA</item>
+        <item>HI</item>
+        <item>ID</item>
+        <item>IL</item>
+        <item>IN</item>
+        <item>IA</item>
+        <item>KS</item>
+        <item>KY</item>
+        <item>LA</item>
+        <item>ME</item>
+        <item>MD</item>
+        <item>MA</item>
+        <item>MI</item>
+        <item>MN</item>
+        <item>MS</item>
+        <item>MO</item>
+        <item>MT</item>
+        <item>NE</item>
+        <item>NV</item>
+        <item>NH</item>
+        <item>NJ</item>
+        <item>NM</item>
+        <item>NY</item>
+        <item>NC</item>
+        <item>ND</item>
+        <item>OH</item>
+        <item>OK</item>
+        <item>OR</item>
+        <item>PA</item>
+        <item>RI</item>
+        <item>SC</item>
+        <item>SD</item>
+        <item>TN</item>
+        <item>TX</item>
+        <item>UT</item>
+        <item>VT</item>
+        <item>VA</item>
+        <item>WA</item>
+        <item>WV</item>
+        <item>WI</item>
+        <item>WY</item>
+    </string-array>
 
 </resources>

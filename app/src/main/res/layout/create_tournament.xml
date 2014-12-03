@@ -1,187 +1,217 @@
-<ScrollView
-    android:id="@+id/scroll_id"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    tools:context="edu.utah.cs4962.golfleaderboard.CreateTournament">
+    <ScrollView
+        android:id="@+id/scroll_id"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:scrollbars="vertical">
 
-        <TextView
-            android:id="@+id/createTournyHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="0dp"
-            android:text="Create Tournament"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            />
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingBottom="@dimen/activity_vertical_margin"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        tools:context="edu.utah.cs4962.golfleaderboard.CreateTournament">
 
-        <TextView
-            android:id="@+id/tournyNameLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/createTournyHeader"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/tournyNameLabel"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            <TextView
+                android:id="@+id/tournyNameLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tournyNameLabel"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <EditText
-            android:id="@+id/tournyNameValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tournyNameLabel"
-            android:layout_marginLeft="35dp"
-            android:layout_toRightOf="@+id/tournyNameLabel"
-            android:hint="Tournament Name">
+            <EditText
+                android:id="@+id/tournyNameValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tournyNameLabel"
+                android:layout_marginLeft="35dp"
+                android:layout_toRightOf="@+id/tournyNameLabel"
+                android:hint="Tournament Name">
 
-            <requestFocus/>
-        </EditText>
+                <requestFocus/>
+            </EditText>
 
-        <TextView
-            android:id="@+id/courseNameLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/tournyNameLabel"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/tournyLocationLabel"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            <TextView
+                android:id="@+id/courseNameLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/tournyNameLabel"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/courseNameLabel"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <EditText
-            android:id="@+id/tournyLocationValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/courseNameLabel"
-            android:layout_marginLeft="35dp"
-            android:layout_toRightOf="@+id/courseNameLabel"
-            android:hint="Course Name">
+            <EditText
+                android:id="@+id/tournyLocationValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/courseNameLabel"
+                android:layout_alignLeft="@id/tournyNameValue"
+                android:layout_toRightOf="@+id/courseNameLabel"
+                android:hint="Course Name">
 
-            <requestFocus/>
-        </EditText>
+                <requestFocus/>
+            </EditText>
 
-        <TextView
-            android:id="@+id/courseCityLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/courseNameLabel"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/tournyLocationLabel"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            <TextView
+                android:id="@+id/courseCityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/courseNameLabel"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tournyLocationLabel"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <EditText
-            android:id="@+id/courseCityValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/courseCityLabel"
-            android:layout_marginLeft="35dp"
-            android:layout_toRightOf="@+id/courseCityLabel"
-            android:hint="Tournament City">
+            <EditText
+                android:id="@+id/courseCityValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/courseCityLabel"
+                android:layout_alignLeft="@+id/tournyNameValue"
+                android:layout_toRightOf="@+id/courseCityLabel"
+                android:hint="Course City">
 
-            <requestFocus/>
-        </EditText>
+                <requestFocus/>
+            </EditText>
 
-        <TextView
-            android:id="@+id/tournyStartDateLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/courseCityLabel"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/tournyDate"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            <TextView
+                android:id="@+id/courseStateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/courseCityLabel"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tournyStatelabel"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <EditText
-            android:id="@+id/tournyStartDateSet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tournyStartDateLabel"
-            android:layout_marginLeft="35dp"
-            android:layout_toRightOf="@+id/tournyStartDateLabel"
-            android:visibility="invisible">
+            <Spinner
+                android:id="@+id/state"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_alignBottom="@id/courseStateLabel"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@id/courseStateLabel"
+                />
 
-            <requestFocus></requestFocus>
-        </EditText>
+            <EditText
+                android:id="@+id/courseStateValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/courseStateLabel"
+                android:layout_marginLeft="35dp"
+                android:layout_toRightOf="@+id/courseStateLabel"
+                android:hint="Course State"
+                android:visibility="invisible">
 
-        <Button
-            android:id="@+id/startDateButton"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/courseCityValue"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/tournyStartDateLabel"
-            android:background="@drawable/apptheme_btn_default_normal_holo_light"
-            android:clickable="true"
-            android:onClick="openStartDatePicker"
-            android:text="Tournament Date"
-            android:textAppearance="?android:attr/textAppearanceButton"/>
+                <requestFocus/>
+            </EditText>
 
-        <TextView
-            android:id="@+id/passcodeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/tournyStartDateLabel"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/passcodeLabel"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            <TextView
+                android:id="@+id/tournyStartDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/courseStateLabel"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tournyDate"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <EditText
-            android:id="@+id/passcodeValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/passcodeLabel"
-            android:layout_marginLeft="35dp"
-            android:layout_toRightOf="@+id/passcodeLabel"
-            android:hint="Enter Passcode">
+            <EditText
+                android:id="@+id/tournyStartDateSet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tournyStartDateLabel"
+                android:layout_marginLeft="35dp"
+                android:layout_toRightOf="@+id/tournyStartDateLabel"
+                android:visibility="invisible">
 
-            <requestFocus/>
-        </EditText>
+                <requestFocus></requestFocus>
+            </EditText>
 
-        <Button
-            android:id="@+id/generatePasscodeButton"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/passcodeLabel"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/apptheme_btn_default_normal_holo_light"
-            android:clickable="true"
-            android:onClick="generatePasscode"
-            android:text="Generate Passcode"/>
+            <Button
+                android:id="@+id/startDateButton"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/courseStateValue"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/tournyStartDateLabel"
+                android:background="@drawable/apptheme_btn_default_normal_holo_light"
+                android:clickable="true"
+                android:onClick="openStartDatePicker"
+                android:text="Tournament Date"
+                android:textAppearance="?android:attr/textAppearanceButton"/>
 
-        <Button
-            android:id="@+id/submitNewTournamentButton"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/generatePasscodeButton"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/apptheme_btn_default_normal_holo_light"
-            android:clickable="true"
-            android:onClick="submitTournament"
-            android:text="Next >"/>
+            <TextView
+                android:id="@+id/passcodeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/tournyStartDateLabel"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/passcodeLabel"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    </RelativeLayout>
-</ScrollView>
+            <EditText
+                android:id="@+id/passcodeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/passcodeLabel"
+                android:layout_alignLeft="@id/courseCityValue"
+                android:layout_toRightOf="@+id/passcodeLabel"
+                android:hint="Enter Passcode">
+
+                <requestFocus/>
+            </EditText>
+
+            <Button
+                android:id="@+id/generatePasscodeButton"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/passcodeLabel"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/apptheme_btn_default_normal_holo_light"
+                android:clickable="true"
+                android:onClick="generatePasscode"
+                android:text="Generate Passcode"/>
+
+            <Button
+                android:id="@+id/submitNewTournamentButton"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/generatePasscodeButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/apptheme_btn_default_normal_holo_light"
+                android:clickable="true"
+                android:onClick="submitTournament"
+                android:text="Next >"/>
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>
