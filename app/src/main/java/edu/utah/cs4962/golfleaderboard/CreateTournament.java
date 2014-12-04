@@ -43,27 +43,6 @@ public class CreateTournament extends Activity
     EditText _tournamentName;
     Spinner _stateSpinner;
     Boolean _justStarted = true;
-    String _state;
-
-    private AdapterView.OnItemSelectedListener _spinnerSelection = new AdapterView.OnItemSelectedListener()
-    {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-        {
-            if (!_justStarted)
-            {
-                _stateSelected.setText(parent.getItemAtPosition(position).toString());
-                _justStarted = false;
-                _state = _stateSelected.getText().toString();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent)
-        {
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -83,7 +62,25 @@ public class CreateTournament extends Activity
         // Apply the adapter to the spinner
         _stateSpinner.setAdapter(adapter);
 
-        _stateSpinner.setOnItemSelectedListener(_spinnerSelection);
+        _stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                if (!_justStarted)
+                {
+                    _stateSelected.setText(parent.getItemAtPosition(position).toString());
+                }
+                else
+                    _justStarted = false;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
     }
 
     @Override
@@ -172,7 +169,7 @@ public class CreateTournament extends Activity
         NetworkRequests nr = new NetworkRequests();
         Pair<Boolean, String> result = nr.validateTournament(_tournamentName.getText().toString(), _passcodeValue.getText().toString(),
                 _tournamentDate.getText().toString(), getUserID(), _courseName.getText().toString(), _courseCity.getText().toString(),
-                _state);
+                _stateSelected.getText().toString());
 
         if (result.first)
         {

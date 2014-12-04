@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    tools:context=".ParValueView">
+
+    <Button
+        android:id="@+id/increment_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="75dp"
+        android:background="@drawable/apptheme_btn_default_normal_holo_light"
+        android:clickable="true"
+        android:enabled="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:onClick="incrementValue"
+        android:text="+"/>
+
+    <Button
+        android:id="@+id/decrement_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/increment_button"
+        android:background="@drawable/apptheme_btn_default_normal_holo_light"
+        android:clickable="true"
+        android:enabled="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:text="-"
+        android:onClick="decrementValue"/>
+
+    <EditText
+        android:id="@+id/parEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/decrement_button"
+        android:layout_alignTop="@+id/increment_button"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@+id/increment_button"
+        android:layout_toRightOf="@+id/decrement_button"
+        android:background="@drawable/apptheme_textfield_focused_holo_light"
+        android:ems="10"
+        android:inputType="number"
+        />
+</RelativeLayout>
