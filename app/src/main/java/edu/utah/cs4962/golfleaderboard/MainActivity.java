@@ -118,7 +118,7 @@ public class MainActivity extends Activity
 
     public void launchCreateAccount(View view)
     {
-        if(_username.toString() == null || _username.toString() == "")
+        if(_username.toString().equals(null) || _username.toString().equals(""))
             Toast.makeText(this, "You must enter a user name.", Toast.LENGTH_LONG).show();
         else
         {

@@ -99,4 +99,17 @@ public class CreateAccount extends Activity
         _email = (EditText) findViewById(R.id.emailEntry);
         _userNameTaken = (TextView) findViewById(R.id.usernameTaken);
     }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        Bundle extras = getIntent().getExtras();
+
+        if(extras != null)
+        {
+            _userName.setText(extras.getString("userName"));
+        }
+    }
 }

@@ -14,15 +14,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -99,7 +98,6 @@ public class CreateTournament extends Activity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.login)
         {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -134,8 +132,15 @@ public class CreateTournament extends Activity
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth)
                     {
+                        String day = "0";
+
+                        if(dayOfMonth < 10)
+                            day = day + dayOfMonth;
+                        else
+                            day = Integer.toString(dayOfMonth);
+
                         _tournamentDate.setText(year + "-"
-                                + (monthOfYear + 1) + "-" + dayOfMonth);
+                                + (monthOfYear + 1) + "-" + day);
 
                     }
                 }, mYear, mMonth, mDay);
@@ -173,7 +178,17 @@ public class CreateTournament extends Activity
 
         if (result.first)
         {
+            ArrayList<String> tournamentValues = new ArrayList<String>();
+            tournamentValues.add(_tournamentName.getText().toString());
+            tournamentValues.add(_passcodeValue.getText().toString());
+            tournamentValues.add(_tournamentDate.getText().toString());
+            tournamentValues.add(getUserID());
+            tournamentValues.add(_courseName.getText().toString());
+            tournamentValues.add(_courseCity.getText().toString());
+            tournamentValues.add(_stateSelected.getText().toString());
+
             Intent intent = new Intent(this, SetupTournamentValues.class);
+            intent.putExtra("TournamentValues", tournamentValues);
             startActivity(intent);
         }
         else

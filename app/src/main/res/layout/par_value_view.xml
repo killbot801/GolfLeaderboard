@@ -22,7 +22,6 @@
         android:enabled="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:onClick="incrementValue"
         android:text="+"/>
 
     <Button
@@ -38,8 +37,7 @@
         android:enabled="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:text="-"
-        android:onClick="decrementValue"/>
+        android:text="-"/>
 
     <EditText
         android:id="@+id/parEntry"
@@ -53,5 +51,7 @@
         android:background="@drawable/apptheme_textfield_focused_holo_light"
         android:ems="10"
         android:inputType="number"
+        android:gravity="center_horizontal"
+        android:text="3"
         />
 </RelativeLayout>
