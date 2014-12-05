@@ -32,6 +32,7 @@
         android:onClick="submitValues"
         android:background="@drawable/apptheme_btn_default_normal_holo_light"
         android:text="Submit"
-        android:clickable="true"/>
+        android:clickable="true"
+        />
 
 </RelativeLayout>

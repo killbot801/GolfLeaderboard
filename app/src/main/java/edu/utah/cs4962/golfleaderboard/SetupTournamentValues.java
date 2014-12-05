@@ -114,6 +114,11 @@ public class SetupTournamentValues extends FragmentActivity
         else
             openJoinCreate();
 
+        //This is what will be needed for the updates on the user's tournament values page.
+        /*int pos = mViewPager.getCurrentItem();
+        ParValueView parValue = (ParValueView) _parFragmentAdapter.getItem(pos);
+        int currentHoleValue = parValue._editTextValue;
+        int currentHole = pos + 1;*/
     }
 
     @Override

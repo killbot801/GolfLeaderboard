@@ -19,11 +19,13 @@
         <activity android:name=".CreateAccount"
                   android:label="@string/createAccount"/>
         <activity android:name=".CreateJoinTournament"
-                  android:label="Create/Join Tournament"/>
+                  android:label="Home Page"/>
         <activity android:name=".CreateTournament"
                   android:label="Create Tournament"/>
         <activity android:name=".SetupTournamentValues"
-                  android:label="Setup Tournament Value"/>
+                  android:label="Setup Tournament Values"/>
+        <activity android:name=".JoinTournament"
+                  android:label="Select Tournament"/>
     </application>
 
 </manifest>
