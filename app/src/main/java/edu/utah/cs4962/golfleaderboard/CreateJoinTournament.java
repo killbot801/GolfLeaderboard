@@ -79,6 +79,7 @@ public class CreateJoinTournament extends Activity
 
     public void openJoinTournament()
     {
-        Toast.makeText(this, "You clicked the join tournament button!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, JoinTournament.class);
+        startActivity(intent);
     }
 }

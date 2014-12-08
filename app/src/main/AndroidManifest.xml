@@ -25,7 +25,9 @@
         <activity android:name=".SetupTournamentValues"
                   android:label="Setup Tournament Values"/>
         <activity android:name=".JoinTournament"
-                  android:label="Select Tournament"/>
+                  android:label="Find Tournaments"/>
+        <activity android:name=".JoinSelect"
+                  android:label="Join Tournament"/>
     </application>
 
 </manifest>

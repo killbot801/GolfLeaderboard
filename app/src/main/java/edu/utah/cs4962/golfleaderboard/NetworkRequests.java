@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -17,6 +18,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -483,6 +486,87 @@ public class NetworkRequests
             Log.e("Add Tournament: ", "There was an error adding the tournament.");
             e.printStackTrace();
             return new Pair<Boolean, String>(false, "Error: Could not add the tournament, please try again.");
+        }
+    }
+
+    public ArrayList<TournamentItem> getTournamentListForJoin(final String state, final String date)
+    {
+        AsyncTask<String, Integer, ArrayList<TournamentItem>> getTournamentListForJoin = new AsyncTask<String, Integer, ArrayList<TournamentItem>>()
+        {
+            @Override
+            protected ArrayList<TournamentItem> doInBackground(String... params)
+            {
+                String contentString = "";
+                ArrayList<TournamentItem> tournamentData = new ArrayList<TournamentItem>();
+                TournamentItem tournamentItem;
+
+                try
+                {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpGet request = new HttpGet("http://www.memnochdacoder.com/getTournamentList/" + state + "/" + date);
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    HttpResponse response = client.execute(request);
+
+                    InputStream content = response.getEntity().getContent();
+
+                    BufferedReader httpReader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+
+                    while ((line = httpReader.readLine()) != null)
+                        contentString += line;
+
+                    try
+                    {
+                        if (contentString.length() <= 0)
+                            return new ArrayList<TournamentItem>();
+
+                        if(contentString.contains("Error:"))
+                        {
+                            tournamentItem = new TournamentItem(1000, "ERROR", contentString);
+                            tournamentData.add(tournamentItem);
+                            return tournamentData;
+                        }
+
+                        JSONArray jsonArray = new JSONArray(contentString);
+
+                        //Iterate through the array and get the info in a format we can use.
+                        for(int arrayIndex = 0; arrayIndex < jsonArray.length(); arrayIndex++)
+                        {
+                            tournamentItem = new TournamentItem(jsonArray.getJSONObject(arrayIndex).getInt("Item1"),
+                                    jsonArray.getJSONObject(arrayIndex).getString("Item2"), jsonArray.getJSONObject(arrayIndex).getString("Item3"));
+                            tournamentData.add(tournamentItem);
+                        }
+
+                        return tournamentData;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Get Tournament Data: ", "Exception found during JSON conversion.");
+                        e.printStackTrace();
+                        return new ArrayList<TournamentItem>();
+                    }
+                }
+                catch (IOException e)
+                {
+                    Log.i("Get Tournament Data: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    return new ArrayList<TournamentItem>();
+                }
+            }
+        };
+
+        getTournamentListForJoin.execute();
+
+        try
+        {
+            return getTournamentListForJoin.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Get Tournament Data: ", "There was an error getting the user ID.");
+            e.printStackTrace();
+            return new ArrayList<TournamentItem>();
         }
     }
 }

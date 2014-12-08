@@ -59,11 +59,6 @@ public class ParValueView extends Fragment
         return v;
     }
 
-    public void setPosition(int position)
-    {
-        _position = position;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {

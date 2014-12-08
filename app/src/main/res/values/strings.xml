@@ -26,6 +26,10 @@
     <string name="new_user">Create Account</string>
     <string name="createTourny">Create Tournament</string>
     <string name="courseNameLabel">Course Name:</string>
+    <string name="tournamentStateSelectionLabel">Select State:</string>
+    <string name="tournamentSelectStateLabel">Select State:</string>
+    <string name="tournamentSelectDateLabel">Select Date:</string>
+    <string name="tournamentSelectLabel">Select Tournament Below</string>
 
     <string-array name="states">
         <item>AL</item>

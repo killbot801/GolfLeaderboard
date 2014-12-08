@@ -8,4 +8,68 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context="edu.utah.cs4962.golfleaderboard.JoinTournament">
 
+    <TextView
+        android:id="@+id/tournamentStateSelectionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="70dp"
+        android:text="@string/tournamentSelectStateLabel"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <Spinner
+        android:id="@+id/stateSelectionForJoin"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/tournamentStateSelectionLabel"
+        android:layout_marginLeft="20dp"
+        android:layout_alignBottom="@+id/tournamentStateSelectionLabel"
+        android:layout_marginTop="50dp"
+        />
+
+    <TextView
+        android:id="@+id/tournamentDateToJoinLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tournamentStateSelectionLabel"
+        android:layout_marginTop="70dp"
+        android:text="@string/tournamentSelectDateLabel"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <EditText
+        android:id="@+id/tournamentDateSelectedToJoin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tournamentDateToJoinLabel"
+        android:layout_alignBottom="@+id/tournamentDateToJoinLabel"
+        android:layout_marginLeft="20dp"
+        android:visibility="invisible">
+        <requestFocus></requestFocus>
+    </EditText>
+
+    <Button
+        android:id="@+id/joinTournamentDateSelect"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/tournamentDateToJoinLabel"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/tournamentDateToJoinLabel"
+        android:background="@drawable/apptheme_btn_default_normal_holo_light"
+        android:clickable="true"
+        android:onClick="openStartDatePicker"
+        android:text="Tournament Date"
+        android:textAppearance="?android:attr/textAppearanceButton"/>
+
+    <Button
+        android:id="@+id/submitJoinTournamentButton"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/joinTournamentDateSelect"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/apptheme_btn_default_normal_holo_light"
+        android:clickable="true"
+        android:onClick="submitJoinSearch"
+        android:text="Search"
+        android:textAppearance="?android:attr/textAppearanceButton"/>
 </RelativeLayout>
