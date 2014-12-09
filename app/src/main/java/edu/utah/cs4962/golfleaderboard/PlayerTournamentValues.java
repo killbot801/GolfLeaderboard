@@ -14,6 +14,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +41,7 @@ public class PlayerTournamentValues extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tournament_values);
 
-        _parValues  = new ArrayList<Integer>();
+        _parValues = new ArrayList<Integer>();
 
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
@@ -42,8 +50,8 @@ public class PlayerTournamentValues extends FragmentActivity
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(_parFragmentAdapter);
 
-        for(int i = 0; i < 18; i ++)
-            _parValues.add(3);
+        for (int i = 0; i < 18; i++)
+            _parValues.add(0);
     }
 
     public class ParFragmentAdapter extends FragmentStatePagerAdapter
@@ -97,26 +105,19 @@ public class PlayerTournamentValues extends FragmentActivity
         }
     }
 
-    public void setParValueArray(int pos, int value)
-    {
-        _parValues.set(pos, value);
-    }
-
     public void submitValues(View view)
     {
-        NetworkRequests nr = new NetworkRequests();
-        Pair<Boolean, String> serverReturnValue = nr.createTournament(_tournamentValues, _parValues);
-
-        if(!serverReturnValue.first)
-            Toast.makeText(getApplicationContext(), serverReturnValue.second, Toast.LENGTH_LONG).show();
-        else
-            openJoinCreate();
-
         //This is what will be needed for the updates on the user's tournament values page.
-        /*int pos = mViewPager.getCurrentItem();
+        int pos = mViewPager.getCurrentItem();
         ParValueView parValue = (ParValueView) _parFragmentAdapter.getItem(pos);
         int currentHoleValue = parValue._editTextValue;
-        int currentHole = pos + 1;*/
+        int currentHole = pos + 1;
+
+        NetworkRequests nr = new NetworkRequests();
+        Pair<Boolean, String> serverReturnValue = nr.updatePlayerScore(getUserID(), currentHoleValue, currentHole);
+
+        Toast.makeText(getApplicationContext(), serverReturnValue.second, Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -126,7 +127,7 @@ public class PlayerTournamentValues extends FragmentActivity
 
         Bundle extras = getIntent().getExtras();
 
-        if(extras != null)
+        if (extras != null)
         {
             _tournamentValues = extras.getStringArrayList("TournamentValues");
         }
@@ -136,5 +137,33 @@ public class PlayerTournamentValues extends FragmentActivity
     {
         Intent intent = new Intent(getApplicationContext(), CreateJoinTournament.class);
         startActivity(intent);
+    }
+
+    public String getUserID()
+    {
+        String returnValue = "";
+
+        try
+        {
+            File file = new File(getApplicationContext().getFilesDir(), "GTourny.txt");
+            FileReader textReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(textReader);
+            String line = null;
+            line = bufferedReader.readLine();
+            Gson gson = new Gson();
+            Type type = new TypeToken<String>()
+            {
+            }.getType();
+
+            returnValue = gson.fromJson(line, type);
+
+            bufferedReader.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return returnValue;
     }
 }

@@ -569,4 +569,168 @@ public class NetworkRequests
             return new ArrayList<TournamentItem>();
         }
     }
+
+    public Pair<Boolean, String> joinTournament(final String tID, final String uID)
+    {
+        AsyncTask<String, Integer, Pair<Boolean, String>> joinTournament = new AsyncTask<String, Integer, Pair<Boolean, String>>()
+        {
+            @Override
+            protected Pair<Boolean, String> doInBackground(String... params)
+            {
+                String contentString = "";
+                ArrayList<TournamentItem> tournamentData = new ArrayList<TournamentItem>();
+                TournamentItem tournamentItem;
+
+                try
+                {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpPost request = new HttpPost("http://www.memnochdacoder.com/addUserToTournament/" + uID + "/" + tID);
+                    JSONObject jsonObject = new JSONObject();
+
+                    jsonObject.accumulate("userName", uID);
+                    jsonObject.accumulate("tournamentID", tID);
+
+                    String json = jsonObject.toString();
+
+                    request.setEntity(new StringEntity(json));
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    HttpResponse response = client.execute(request);
+
+                    InputStream content = response.getEntity().getContent();
+
+                    BufferedReader httpReader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+
+                    while ((line = httpReader.readLine()) != null)
+                        contentString += line;
+
+                    try
+                    {
+                        if (contentString.length() <= 0)
+                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+
+                        JsonElement ele = new JsonParser().parse(contentString);
+                        JsonObject obj = ele.getAsJsonObject();
+                        Boolean boolToggle = obj.get("Success").getAsBoolean();
+                        String authMessage = obj.get("Message").getAsString();
+
+                        return new Pair<Boolean, String>(boolToggle, authMessage);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Get Tournament Data: ", "Exception found during JSON conversion.");
+                        e.printStackTrace();
+                        return new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                    }
+                }
+                catch (IOException e)
+                {
+                    Log.i("Get Tournament Data: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    return new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                }
+                catch (JSONException e)
+                {
+                    Log.i("Get Tournament Data: ", "Exception found during JSON request.");
+                    e.printStackTrace();
+                    return new Pair<Boolean, String>(false, "Error: Exception found during JSON request.");
+                }
+            }
+        };
+
+        joinTournament.execute();
+
+        try
+        {
+            return joinTournament.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Join Tournament: ", "There was an error getting the tournament information.");
+            e.printStackTrace();
+            return new Pair<Boolean, String>(false, "Error: Issue retrieving join tournament information.");
+        }
+    }
+
+    /*public Pair<Boolean, String> updatePlayerScore(final String userID, final int currentHoleValue, final int currentHole)
+    {
+        AsyncTask<String, Integer, Pair<Boolean, String>> updatePlayerScore = new AsyncTask<String, Integer, Pair<Boolean, String>>()
+        {
+            @Override
+            protected Pair<Boolean, String> doInBackground(String... params)
+            {
+                String contentString = "";
+                ArrayList<TournamentItem> tournamentData = new ArrayList<TournamentItem>();
+                TournamentItem tournamentItem;
+
+                try
+                {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpGet request = new HttpGet("http://www.memnochdacoder.com/updatePlayerScore/" + userID + "/" + date);
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    HttpResponse response = client.execute(request);
+
+                    InputStream content = response.getEntity().getContent();
+
+                    BufferedReader httpReader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+
+                    while ((line = httpReader.readLine()) != null)
+                        contentString += line;
+
+                    try
+                    {
+                        if (contentString.length() <= 0)
+                            return new ArrayList<TournamentItem>();
+
+                        if(contentString.contains("Error:"))
+                        {
+                            tournamentItem = new TournamentItem(1000, "ERROR", contentString);
+                            tournamentData.add(tournamentItem);
+                            return tournamentData;
+                        }
+
+                        JSONArray jsonArray = new JSONArray(contentString);
+
+                        //Iterate through the array and get the info in a format we can use.
+                        for(int arrayIndex = 0; arrayIndex < jsonArray.length(); arrayIndex++)
+                        {
+                            tournamentItem = new TournamentItem(jsonArray.getJSONObject(arrayIndex).getInt("Item1"),
+                                    jsonArray.getJSONObject(arrayIndex).getString("Item2"), jsonArray.getJSONObject(arrayIndex).getString("Item3"));
+                            tournamentData.add(tournamentItem);
+                        }
+
+                        return tournamentData;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Get Tournament Data: ", "Exception found during JSON conversion.");
+                        e.printStackTrace();
+                        return new ArrayList<TournamentItem>();
+                    }
+                }
+                catch (IOException e)
+                {
+                    Log.i("Get Tournament Data: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    return new ArrayList<TournamentItem>();
+                }
+            }
+        };
+
+        getTournamentListForJoin.execute();
+
+        try
+        {
+            return getTournamentListForJoin.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Get Tournament Data: ", "There was an error getting the user ID.");
+            e.printStackTrace();
+            return new ArrayList<TournamentItem>();
+        }
+    }*/
 }

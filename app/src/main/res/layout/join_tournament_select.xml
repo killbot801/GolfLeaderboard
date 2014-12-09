@@ -24,6 +24,17 @@
         android:layout_below="@+id/joinTournamentSpinnerLabel"
         />
 
+    <TextView
+        android:id="@+id/tournamentDateDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tournamentSelectionSpinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="invisible"/>
+
     <Button
         android:id="@+id/joinTournamentDateSelect"
         android:layout_width="200dp"
@@ -35,6 +46,19 @@
         android:clickable="true"
         android:onClick="openStartDatePicker"
         android:text="Tournament Date"
+        android:textAppearance="?android:attr/textAppearanceButton"/>
+
+    <Button
+        android:id="@+id/joinTournamentButton"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/joinTournamentDateSelect"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/apptheme_btn_default_normal_holo_light"
+        android:clickable="true"
+        android:onClick="joinTournament"
+        android:text="Join Tournament"
         android:textAppearance="?android:attr/textAppearanceButton"/>
 
 </RelativeLayout>

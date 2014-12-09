@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="edu.utah.cs4962.golfleaderboard.EditAccount"
+            android:name="edu.utah.cs4962.golfleaderboard.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,8 +30,8 @@
                   android:label="Find Tournaments"/>
         <activity android:name=".JoinSelect"
                   android:label="Join Tournament"/>
-        <!--<activity android:name=".EditAccount"
-                  android:label="Edit Account Information"/>-->
+        <activity android:name=".EditAccount"
+                  android:label="Edit Account Information"/>
     </application>
 
 </manifest>
