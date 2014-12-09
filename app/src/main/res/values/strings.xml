@@ -30,6 +30,9 @@
     <string name="tournamentSelectStateLabel">Select State:</string>
     <string name="tournamentSelectDateLabel">Select Date:</string>
     <string name="tournamentSelectLabel">Select Tournament Below</string>
+    <string name="editAccount">Update</string>
+    <string name="pictureLabel">Change\nPicture:</string>
+    <string name="cannot">Cannot</string>
 
     <string-array name="states">
         <item>AL</item>

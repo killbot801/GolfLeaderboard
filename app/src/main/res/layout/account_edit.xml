@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context="edu.utah.cs4962.golfleaderboard.CreateAccount">
+    tools:context="edu.utah.cs4962.golfleaderboard.EditAccount">
 
     <ScrollView
         android:id="@+id/scroll_id"
@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        tools:context="edu.utah.cs4962.golfleaderboard.EditAccount">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:tools="http://schemas.android.com/tools"
@@ -22,38 +23,36 @@
                         android:paddingBottom="@dimen/activity_vertical_margin"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:paddingTop="@dimen/activity_vertical_margin">
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        tools:context="edu.utah.cs4962.golfleaderboard.EditAccount">
 
             <TextView
-                android:id="@+id/userNameText"
+                android:id="@+id/pictureLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/textView1"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="50dp"
-                android:text="@string/userName"
+                android:text="@string/pictureLabel"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-            <EditText
-                android:id="@+id/createUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/userNameText"
-                android:layout_marginLeft="35dp"
-                android:layout_toRightOf="@+id/userNameText"
-                android:hint="User Name">
-
-                <requestFocus/>
-            </EditText>
+            <Button
+                android:id="@+id/btnIntend"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_toRightOf="@+id/pictureLabel"
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/default_user"
+                />
 
             <TextView
                 android:id="@+id/passwordText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/userNameText"
-                android:layout_below="@+id/userNameText"
-                android:layout_marginTop="25dp"
+                android:layout_alignLeft="@+id/pictureLabel"
+                android:layout_below="@+id/pictureLabel"
+                android:layout_marginTop="100dp"
                 android:text="@string/passWord"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -61,9 +60,9 @@
                 android:id="@+id/createPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/passwordText"
                 android:layout_alignBottom="@+id/passwordText"
-                android:layout_alignLeft="@+id/createUserName"
-                android:layout_alignRight="@+id/createUserName"
+                android:layout_marginLeft="50dp"
                 android:hint="Password"
                 android:inputType="textPassword">
 
@@ -194,14 +193,15 @@
                 android:visibility="invisible"/>
 
             <Button
+                android:id="@+id/updateAccountButton"
                 android:layout_width="300dp"
                 android:layout_height="70dp"
                 android:layout_below="@id/emailEntry"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/apptheme_btn_default_normal_holo_light"
-                android:onClick="validateUserData"
-                android:text="@string/createAccount"
+                android:onClick="updateAccount"
+                android:text="@string/editAccount"
                 />
 
         </RelativeLayout>
