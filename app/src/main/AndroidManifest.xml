@@ -32,6 +32,8 @@
                   android:label="Join Tournament"/>
         <activity android:name=".EditAccount"
                   android:label="Edit Account Information"/>
+        <activity android:name=".PlayerTournamentValues"
+                  android:label="Enter Score for Hole"/>
     </application>
 
 </manifest>
