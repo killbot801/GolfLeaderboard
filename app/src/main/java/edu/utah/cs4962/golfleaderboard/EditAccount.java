@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,10 +21,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.koushikdutta.ion.Ion;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,25 +43,15 @@ public class EditAccount extends Activity
     EditText _city;
     EditText _state;
     EditText _email;
-
-    private static final int ACTION_TAKE_PHOTO = 1;
-    private static final String BITMAP_STORAGE_KEY = "viewbitmap";
-    private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
-
-    private ImageView _mImageView;
-    private Bitmap _mImageBitmap;
-    private String _mCurrentPhotoPath;
-
-    private static final String JPEG_FILE_PREFIX = "IMG_";
-    private static final String JPEG_FILE_SUFFIX = ".jpg";
+    String _avatarPath;
 
     private AlbumStorageDirFactory _mAlbumStorageDirFactory = null;
 
-    Button _picButton;
-
-    private String getAlbumName() {return "CameraSample";}
-
-
+    ImageView _picButton;
+    private String _currentPhotoPath;
+    private static final String JPEG_FILE_PREFIX = "IMG_";
+    private static final String JPEG_FILE_SUFFIX = ".jpg";
+    private static final int ACTION_TAKE_PHOTO = 1;
 
 
     @Override
@@ -66,11 +61,8 @@ public class EditAccount extends Activity
         setContentView(R.layout.account_edit);
         setupGlobals();
 
-        //_mImageView = (ImageView) findViewById(R.id.imageView1);
-        _mImageBitmap = null;
-
         //Button picBtn = (Button) findViewById(R.id.btnIntend);
-
+        _picButton = (ImageView) findViewById(R.id.btnIntend);
         setBtnListenerOrDisable(_picButton, mTakePicOnClickListener, MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO)
@@ -81,13 +73,31 @@ public class EditAccount extends Activity
         {
             _mAlbumStorageDirFactory = new BaseAlbumDirFactory();
         }
+
+        getAccountData();
+        if (_avatarPath != "default")
+            Ion.with(_picButton).error(R.drawable.default_user).load(_avatarPath);
+    }
+
+    private void getAccountData()
+    {
+        NetworkRequests nr = new NetworkRequests();
+        ArrayList<String> data = nr.getAccountData("1");
+        _firstName.setText(data.get(0));
+        _lastName.setText(data.get(1));
+        _email.setText(data.get(2));
+        _city.setText(data.get(3));
+        _state.setText(data.get(4));
+        _password.setText(data.get(5));
+        _avatarPath = data.get(6);
+        //image is index 6
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.navigation_menu, menu);
         return true;
     }
 
@@ -99,10 +109,25 @@ public class EditAccount extends Activity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
+        if (id == R.id.login)
         {
-            return true;
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.create_account)
+        {
+            Intent intent = new Intent(getApplicationContext(), CreateAccount.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.join_tournament)
+        {
+            Intent intent = new Intent(getApplicationContext(), JoinTournament.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.create_tournament)
+        {
+            Intent intent = new Intent(getApplicationContext(), CreateTournament.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -116,23 +141,130 @@ public class EditAccount extends Activity
         _city = (EditText) findViewById(R.id.cityEntry);
         _state = (EditText) findViewById(R.id.stateEntry);
         _email = (EditText) findViewById(R.id.emailEntry);
-        _picButton = (Button) findViewById(R.id.btnIntend);
+        _avatarPath = "";
     }
 
-    public void updateAccount(View view)
+    private void setBtnListenerOrDisable(ImageView btn, Button.OnClickListener onClickListener, String intentName)
+    {
+        if (isIntentAvailable(this, intentName))
+        {
+            btn.setOnClickListener(onClickListener);
+        }
+        else
+        {
+            //btn.setText(getText(R.string.cannot).toString() + " " + btn.getText());
+            btn.setClickable(false);
+        }
+    }
+
+    public static boolean isIntentAvailable(Context context, String action)
+    {
+        final PackageManager packageManager = context.getPackageManager();
+        final Intent intent = new Intent(action);
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+    Button.OnClickListener mTakePicOnClickListener = new Button.OnClickListener()
+    {
+        @Override
+        public void onClick(View v)
+        {
+            dispatchTakePictureIntent(ACTION_TAKE_PHOTO);
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        switch (requestCode)
+        {
+            case ACTION_TAKE_PHOTO:
+            {
+                if (resultCode == RESULT_OK)
+                {
+                    handlePhoto();
+                }
+                break;
+            }
+        }
+    }
+
+    private void handlePhoto()
     {
 
+        if (_currentPhotoPath != null)
+        {
+            setPic();
+            galleryAddPic();
+            //TODO: ADD CALL TO UPDATE PATH IN SQL
+            _currentPhotoPath = null;
+        }
+
+    }
+
+    private void setPic()
+    {
+        Ion.with(_picButton).placeholder(R.drawable.apptheme_btn_check_holo_light).error(R.drawable.default_user).load(_currentPhotoPath);
+    }
+
+
+    private void galleryAddPic()
+    {
+        Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
+        File f = new File(_currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+    private void dispatchTakePictureIntent(int actionCode)
+    {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File f = null;
+
+        try
+        {
+            f = setUpPhotoFile();
+            _currentPhotoPath = f.getAbsolutePath();
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            f = null;
+            _currentPhotoPath = null;
+        }
+
+        startActivityForResult(takePictureIntent, actionCode);
+    }
+
+    private File setUpPhotoFile() throws IOException
+    {
+
+        File f = createImageFile();
+        _currentPhotoPath = f.getAbsolutePath();
+
+        return f;
+    }
+
+    private File createImageFile() throws IOException
+    {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
+        File albumF = getAlbumDir();
+        File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
+        return imageF;
     }
 
     private File getAlbumDir()
     {
-        File storageDir = null;
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
         {
-
-            storageDir = _mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
-
             if (storageDir != null)
             {
                 if (!storageDir.mkdirs())
@@ -154,195 +286,9 @@ public class EditAccount extends Activity
         return storageDir;
     }
 
-    private File createImageFile() throws IOException
+
+    public void updateAccount(View view)
     {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-        File albumF = getAlbumDir();
-        File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
-        return imageF;
+        Toast.makeText(getApplicationContext(), "HERRO", Toast.LENGTH_SHORT).show();
     }
-
-    private File setUpPhotoFile() throws IOException
-    {
-
-        File f = createImageFile();
-        _mCurrentPhotoPath = f.getAbsolutePath();
-
-        return f;
-    }
-
-    private void setPic()
-    {
-
-		/* There isn't enough memory to open up more than a couple camera photos */
-        /* So pre-scale the target bitmap into which the file is decoded */
-
-		/* Get the size of the ImageView */
-        //int targetW = _mImageView.getWidth();
-        //int targetH = _mImageView.getHeight();
-
-		/* Get the size of the image */
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(_mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-		/* Figure out which way needs to be reduced less */
-        int scaleFactor = 1;
-        /*if ((targetW > 0) || (targetH > 0))
-        {
-            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-        }*/
-
-		/* Set bitmap options to scale the image decode target */
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-		/* Decode the JPEG file into a Bitmap */
-        //Bitmap bitmap = BitmapFactory.decodeFile(_mCurrentPhotoPath, bmOptions);
-
-        _picButton.setBackground(Drawable.createFromPath(_mCurrentPhotoPath));
-		/* Associate the Bitmap to the ImageView */
-        //_mImageView.setImageBitmap(bitmap);
-        //_mImageView.setVisibility(View.VISIBLE);
-    }
-
-    private void galleryAddPic()
-    {
-        Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-        File f = new File(_mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
-
-    private void dispatchTakePictureIntent(int actionCode)
-    {
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        switch (actionCode)
-        {
-            case ACTION_TAKE_PHOTO:
-                File f = null;
-
-                try
-                {
-                    f = setUpPhotoFile();
-                    _mCurrentPhotoPath = f.getAbsolutePath();
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                    f = null;
-                    _mCurrentPhotoPath = null;
-                }
-                break;
-
-            default:
-                break;
-        } // switch
-
-        startActivityForResult(takePictureIntent, actionCode);
-    }
-
-
-    private void handleBigCameraPhoto()
-    {
-
-        if (_mCurrentPhotoPath != null)
-        {
-            setPic();
-            galleryAddPic();
-            _mCurrentPhotoPath = null;
-        }
-
-    }
-
-    Button.OnClickListener mTakePicOnClickListener = new Button.OnClickListener()
-    {
-        @Override
-        public void onClick(View v)
-        {
-            dispatchTakePictureIntent(ACTION_TAKE_PHOTO);
-        }
-    };
-
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        switch (requestCode)
-        {
-            case ACTION_TAKE_PHOTO:
-            {
-                if (resultCode == RESULT_OK)
-                {
-                    handleBigCameraPhoto();
-                }
-                break;
-            } // ACTION_TAKE_PHOTO_B
-        } // switch
-    }
-
-    // Some lifecycle callbacks so that the image can survive orientation change
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        outState.putParcelable(BITMAP_STORAGE_KEY, _mImageBitmap);
-
-        outState.putBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY, (_mImageBitmap != null));
-
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        super.onRestoreInstanceState(savedInstanceState);
-        _mImageBitmap = savedInstanceState.getParcelable(BITMAP_STORAGE_KEY);
-
-        _mImageView.setImageBitmap(_mImageBitmap);
-        _mImageView.setVisibility(savedInstanceState.getBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY) ? ImageView.VISIBLE : ImageView.INVISIBLE);
-    }
-
-    /**
-     * Indicates whether the specified action can be used as an intent. This
-     * method queries the package manager for installed packages that can
-     * respond to an intent with the specified action. If no suitable package is
-     * found, this method returns false.
-     * http://android-developers.blogspot.com/2009/01/can-i-use-this-intent.html
-     *
-     * @param context The application's environment.
-     * @param action  The Intent action to check for availability.
-     * @return True if an Intent with the specified action can be sent and
-     * responded to, false otherwise.
-     */
-    public static boolean isIntentAvailable(Context context, String action)
-    {
-        final PackageManager packageManager = context.getPackageManager();
-        final Intent intent = new Intent(action);
-        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return list.size() > 0;
-    }
-
-    private void setBtnListenerOrDisable(Button btn, Button.OnClickListener onClickListener, String intentName)
-    {
-        if (isIntentAvailable(this, intentName))
-        {
-            btn.setOnClickListener(onClickListener);
-        }
-        else
-        {
-            btn.setText(getText(R.string.cannot).toString() + " " + btn.getText());
-            btn.setClickable(false);
-        }
-    }
-
 }
