@@ -7,7 +7,10 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,9 +24,10 @@ public class CreateAccount extends Activity
     EditText _firstName;
     EditText _lastName;
     EditText _city;
-    EditText _state;
+    Spinner _state;
     EditText _email;
     TextView _userNameTaken;
+    String _stateSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,6 +35,29 @@ public class CreateAccount extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_account);
         setupGlobals();
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.states, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        _state.setAdapter(adapter);
+
+        _state.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                _stateSelected = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
     }
 
     @Override
@@ -71,7 +98,7 @@ public class CreateAccount extends Activity
 
         NetworkRequests nr = NetworkRequests.getNetworkRequestInstance();
         Pair<Boolean, String> createResponse = nr.createUser(_userName.getText().toString(), _password.getText().toString(),
-                _firstName.getText().toString(), _lastName.getText().toString(), _city.getText().toString(), _state.getText().toString(), _email.getText().toString());
+                _firstName.getText().toString(), _lastName.getText().toString(), _city.getText().toString(), _stateSelected, _email.getText().toString());
 
         if(createResponse.first)
         {
@@ -95,7 +122,7 @@ public class CreateAccount extends Activity
         _firstName = (EditText) findViewById(R.id.firstName);
         _lastName = (EditText) findViewById(R.id.lastNameTextEntry);
         _city = (EditText) findViewById(R.id.cityEntry);
-        _state = (EditText) findViewById(R.id.stateEntry);
+        _state = (Spinner) findViewById(R.id.stateEntry);
         _email = (EditText) findViewById(R.id.emailEntry);
         _userNameTaken = (TextView) findViewById(R.id.usernameTaken);
     }

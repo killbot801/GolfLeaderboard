@@ -119,13 +119,13 @@ public class JoinSelect extends Activity
 
         Bundle extras = getIntent().getExtras();
 
-        if(extras != null)
+        if (extras != null)
         {
             _theList = extras.getParcelableArrayList("TournamentValues");
-            if(_theList != null && _theList.size() != 0)
+            if (_theList != null && _theList.size() != 0)
             {
                 _tournaments = new ArrayList<String>();
-                for(int listIndex = 0; listIndex < _theList.size(); listIndex++)
+                for (int listIndex = 0; listIndex < _theList.size(); listIndex++)
                 {
                     _tournaments.add(_theList.get(listIndex).gettName());
                 }
@@ -169,18 +169,17 @@ public class JoinSelect extends Activity
         NetworkRequests networkRequests = new NetworkRequests();
         Pair<Boolean, String> validationResponse = networkRequests.validateTournamentPasscode(Integer.toString(_theList.get(_arrayPosition).gettID()), _tournamentPasscode.getText().toString());
 
-        if(_tournamentPasscode.getText().toString() == "")
+        if (_tournamentPasscode.getText().toString() == "")
             Toast.makeText(getApplicationContext(), "You must enter a passcode.", Toast.LENGTH_SHORT).show();
 
-        if(_tournamentSelected == "")
+        if (_tournamentSelected == "")
             Toast.makeText(getApplicationContext(), "You must select a tournament.", Toast.LENGTH_SHORT).show();
 
-        if(!validationResponse.first)
+        if (!validationResponse.first)
             Toast.makeText(getApplicationContext(), validationResponse.second, Toast.LENGTH_LONG).show();
         else
         {
             Pair<Boolean, String> joinReturnValue = networkRequests.joinTournament(_tournamentID, _userID);
-
             if (joinReturnValue.first)
                 launchPlayerTournamentValues();
             else
@@ -195,13 +194,13 @@ public class JoinSelect extends Activity
 
         Bundle extras = getIntent().getExtras();
 
-        if(extras != null)
+        if (extras != null)
         {
             _theList = extras.getParcelableArrayList("TournamentValues");
-            if(_theList != null && _theList.size() != 0)
+            if (_theList != null && _theList.size() != 0)
             {
-                _tournaments = new ArrayList<String>();
-                for(int listIndex = 0; listIndex < _theList.size(); listIndex++)
+                _tournaments = new ArrayList<>();
+                for (int listIndex = 0; listIndex < _theList.size(); listIndex++)
                 {
                     _tournaments.add(_theList.get(listIndex).gettName());
                 }
@@ -235,8 +234,20 @@ public class JoinSelect extends Activity
                 buffWriter.newLine();
                 buffWriter.close();
             }
+            else
+            {
+                BufferedWriter buffWriter = new BufferedWriter(new FileWriter(file, false));
+                Gson gson = new Gson();
+                Type type = new TypeToken<String>()
+                {
+                }.getType();
+                String json = gson.toJson(_tournamentID, type);
+                buffWriter.write(json);
+                buffWriter.newLine();
+                buffWriter.close();
+            }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }

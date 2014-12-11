@@ -153,6 +153,18 @@ public class MainActivity extends Activity
                 buffWriter.newLine();
                 buffWriter.close();
             }
+            else
+            {
+                BufferedWriter buffWriter = new BufferedWriter(new FileWriter(file, false));
+                Gson gson = new Gson();
+                Type type = new TypeToken<String>()
+                {
+                }.getType();
+                String json = gson.toJson(_userID, type);
+                buffWriter.write(json);
+                buffWriter.newLine();
+                buffWriter.close();
+            }
         }
         catch(Exception e)
         {

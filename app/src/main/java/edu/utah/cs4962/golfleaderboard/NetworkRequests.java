@@ -1118,12 +1118,22 @@ public class NetworkRequests
             protected ArrayList<Integer> doInBackground(String... params)
             {
                 String contentString = "";
-                ArrayList<Integer> tournamentData = new ArrayList<Integer>();
+                ArrayList<Integer> playerTournamentScore = new ArrayList<Integer>();
 
                 try
                 {
                     HttpClient client = new DefaultHttpClient();
-                    HttpGet request = new HttpGet("http://www.memnochdacoder.com/getParValues/" + tid + "/" + userID);
+                    HttpPost request = new HttpPost("http://www.memnochdacoder.com/getPlayerParValues/");
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    JSONObject jsonObject = new JSONObject();
+
+                    jsonObject.accumulate("tid", tid);
+                    jsonObject.accumulate("uid", userID);
+
+                    String json = jsonObject.toString();
+
+                    request.setEntity(new StringEntity(json));
                     request.setHeader("Accept", "application/json");
                     request.setHeader("Content-Type", "application/json");
                     HttpResponse response = client.execute(request);
@@ -1141,31 +1151,32 @@ public class NetworkRequests
                         if (contentString.length() <= 0)
                             return new ArrayList<>();
 
-                        if(contentString.contains("Error:"))
-                        {
-                            return tournamentData;
-                        }
-
                         JSONArray jsonArray = new JSONArray(contentString);
 
                         //Iterate through the array and get the info in a format we can use.
                         for(int arrayIndex = 0; arrayIndex < jsonArray.length(); arrayIndex++)
                         {
-                            tournamentData.add(jsonArray.getInt(arrayIndex));
+                            playerTournamentScore.add(jsonArray.getInt(arrayIndex));
                         }
 
-                        return tournamentData;
+                        return playerTournamentScore;
                     }
                     catch (Exception e)
                     {
-                        Log.i("Get Tournament Data: ", "Exception found during JSON conversion.");
+                        Log.i("Get Player Hole Data: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
                         return new ArrayList<>();
                     }
                 }
                 catch (IOException e)
                 {
-                    Log.i("Get Tournament Data: ", "Exception found during HTTP request.");
+                    Log.i("Get Player Hole Data: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    return new ArrayList<>();
+                }
+                catch (JSONException e)
+                {
+                    Log.i("Get Player Hole Data:", "Exception found during JSON retrieval.");
                     e.printStackTrace();
                     return new ArrayList<>();
                 }
