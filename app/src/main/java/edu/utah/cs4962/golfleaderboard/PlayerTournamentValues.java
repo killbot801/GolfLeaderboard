@@ -43,7 +43,7 @@ public class PlayerTournamentValues extends FragmentActivity
         setContentView(R.layout.player_tournament_values);
         setLeaderboardView();
 
-        _parValues = new ArrayList<Integer>();
+        getParValues();
 
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
@@ -67,9 +67,13 @@ public class PlayerTournamentValues extends FragmentActivity
         public Fragment getItem(int i)
         {
             Fragment fragment = new PlayerParValueView();
+
+            getParValues();
+
             Bundle args = new Bundle();
 
             args.putInt(PlayerParValueFragment.ARG_OBJECT, i + 1);
+            args.putString(PlayerParValueFragment.PAR_OBJECT, "Par for current hole:\n" + _tournamentValues.get(i));
             fragment.setArguments(args);
             return fragment;
         }
@@ -90,6 +94,7 @@ public class PlayerTournamentValues extends FragmentActivity
     public static class PlayerParValueFragment extends android.app.Fragment
     {
         public static final String ARG_OBJECT = "object";
+        public static final String PAR_OBJECT = "ParValue";
 
         @Override
         public View onCreateView(LayoutInflater inflater,
@@ -195,16 +200,16 @@ public class PlayerTournamentValues extends FragmentActivity
         String playerName = "";
         String currentLeader = "";
 
-        if(getPlayerName.first)
+        if (getPlayerName.first)
             playerName = getPlayerName.second;
 
-        if(!playerName.equals(""))
+        if (!playerName.equals(""))
         {
             currentLeader = _leaderboard.get(0).first;
 
             for (int leaderboardIndex = 0; leaderboardIndex < _leaderboard.size(); leaderboardIndex++)
             {
-                if(_leaderboard.get(leaderboardIndex).first.equals(playerName))
+                if (_leaderboard.get(leaderboardIndex).first.equals(playerName))
                 {
                     playerRank = Integer.toString(leaderboardIndex + 1);
                     playerScoreFromServer = Integer.toString(_leaderboard.get(leaderboardIndex).second);
@@ -214,7 +219,7 @@ public class PlayerTournamentValues extends FragmentActivity
 
         if (_leaderboard.size() != 0)
         {
-             textToShow = "Current Leader: " + _leaderboard.get(0).first + "\n" +
+            textToShow = "Current Leader: " + _leaderboard.get(0).first + "\n" +
                     "Current Rank: " + playerRank + "\n" +
                     "Current Score: " + playerScoreFromServer;
         }
@@ -226,5 +231,18 @@ public class PlayerTournamentValues extends FragmentActivity
         }
 
         leaderboardText.setText(textToShow);
+    }
+
+    public void getParValues()
+    {
+        String tournamentID = getTournamentID();
+        NetworkRequests nr = new NetworkRequests();
+        _tournamentValues = nr.getParValues(tournamentID);
+
+        if (_tournamentValues.size() == 0)
+        {
+            for (int i = 0; i < 18; i++)
+                _tournamentValues.add("0");
+        }
     }
 }

@@ -1,7 +1,6 @@
 package edu.utah.cs4962.golfleaderboard;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
@@ -10,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -24,27 +22,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by ljohnson on 12/5/14.
  */
 public class JoinSelect extends Activity
 {
-    final Calendar c = Calendar.getInstance();
-    int mYear = c.get(Calendar.YEAR);
-    int mMonth = c.get(Calendar.MONTH);
-    int mDay = c.get(Calendar.DAY_OF_MONTH);
     String _userID;
     ArrayList<TournamentItem> _theList;
     ArrayList<String> _tournaments;
-    Spinner _tournamentSpinner;
     String _tournamentSelected;
     int _arrayPosition;
-    EditText _tournamentDate;
+    EditText _tournamentPasscode;
+    Spinner _tournamentSpinner;
+    String _tournamentID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,11 +47,13 @@ public class JoinSelect extends Activity
         _userID = getUserID();
         setupGlobals();
 
-        ArrayAdapter<String> tournamentAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, _tournaments);
-
-        tournamentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, _tournaments);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        _tournamentSpinner.setAdapter(tournamentAdapter);
+        _tournamentSpinner.setAdapter(adapter);
 
         _tournamentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -66,6 +61,7 @@ public class JoinSelect extends Activity
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 _tournamentSelected = parent.getItemAtPosition(position).toString();
+                _tournamentID = Integer.toString(_theList.get(position).gettID());
                 _arrayPosition = position;
             }
 
@@ -118,37 +114,8 @@ public class JoinSelect extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    public void openStartDatePicker(View view)
-    {
-        DatePickerDialog dpd = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener()
-                {
-
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth)
-                    {
-                        String day = "0";
-
-                        if(dayOfMonth < 10)
-                            day = day + dayOfMonth;
-                        else
-                            day = Integer.toString(dayOfMonth);
-
-                        _tournamentDate.setText(year + "-"
-                                + (monthOfYear + 1) + "-" + day);
-
-                    }
-                }, mYear, mMonth, mDay);
-
-        dpd.show();
-
-        findViewById(R.id.tournamentDateDisplay).setVisibility(View.VISIBLE);
-    }
-
     public void setupGlobals()
     {
-        _tournamentSpinner = (Spinner) findViewById(R.id.tournamentSelectionSpinner);
 
         Bundle extras = getIntent().getExtras();
 
@@ -165,7 +132,8 @@ public class JoinSelect extends Activity
             }
         }
 
-        _tournamentDate = (EditText) findViewById(R.id.tournamentDateDisplay);
+        _tournamentPasscode = (EditText) findViewById(R.id.tournamentPasscodeEntry);
+        _tournamentSpinner = (Spinner) findViewById(R.id.tournamentSelectionSpinner);
     }
 
     public String getUserID()
@@ -198,19 +166,26 @@ public class JoinSelect extends Activity
 
     public void joinTournament(View view)
     {
-        if(_tournamentDate.getText().toString() == "")
-            Toast.makeText(getApplicationContext(), "You must select a date.", Toast.LENGTH_SHORT).show();
+        NetworkRequests networkRequests = new NetworkRequests();
+        Pair<Boolean, String> validationResponse = networkRequests.validateTournamentPasscode(Integer.toString(_theList.get(_arrayPosition).gettID()), _tournamentPasscode.getText().toString());
+
+        if(_tournamentPasscode.getText().toString() == "")
+            Toast.makeText(getApplicationContext(), "You must enter a passcode.", Toast.LENGTH_SHORT).show();
 
         if(_tournamentSelected == "")
             Toast.makeText(getApplicationContext(), "You must select a tournament.", Toast.LENGTH_SHORT).show();
 
-        NetworkRequests networkRequests = new NetworkRequests();
-        Pair<Boolean, String> joinReturnValue = networkRequests.joinTournament(Integer.toString(_theList.get(_arrayPosition).gettID()), getUserID());
-
-        if(joinReturnValue.first)
-            launchPlayerTournamentValues();
+        if(!validationResponse.first)
+            Toast.makeText(getApplicationContext(), validationResponse.second, Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(getApplicationContext(), joinReturnValue.second, Toast.LENGTH_LONG).show();
+        {
+            Pair<Boolean, String> joinReturnValue = networkRequests.joinTournament(_tournamentID, _userID);
+
+            if (joinReturnValue.first)
+                launchPlayerTournamentValues();
+            else
+                Toast.makeText(getApplicationContext(), joinReturnValue.second, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -255,7 +230,7 @@ public class JoinSelect extends Activity
                 Type type = new TypeToken<String>()
                 {
                 }.getType();
-                String json = gson.toJson(_tournamentSelected, type);
+                String json = gson.toJson(_tournamentID, type);
                 buffWriter.write(json);
                 buffWriter.newLine();
                 buffWriter.close();

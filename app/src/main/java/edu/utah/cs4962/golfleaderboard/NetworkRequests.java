@@ -570,6 +570,87 @@ public class NetworkRequests
         }
     }
 
+    public Pair<Boolean, String> validateTournamentPasscode(final String tID, final String passcode)
+    {
+        AsyncTask<String, Integer, Pair<Boolean, String>> joinTournament = new AsyncTask<String, Integer, Pair<Boolean, String>>()
+        {
+            @Override
+            protected Pair<Boolean, String> doInBackground(String... params)
+            {
+                String contentString = "";
+
+                try
+                {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpPost request = new HttpPost("http://www.memnochdacoder.com/validateTournamentPasscode");
+                    JSONObject jsonObject = new JSONObject();
+
+                    jsonObject.accumulate("tid", tID);
+                    jsonObject.accumulate("passcode", passcode);
+
+                    String json = jsonObject.toString();
+
+                    request.setEntity(new StringEntity(json));
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    HttpResponse response = client.execute(request);
+
+                    InputStream content = response.getEntity().getContent();
+
+                    BufferedReader httpReader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+
+                    while ((line = httpReader.readLine()) != null)
+                        contentString += line;
+
+                    try
+                    {
+                        if (contentString.length() <= 0)
+                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+
+                        JsonElement ele = new JsonParser().parse(contentString);
+                        JsonObject obj = ele.getAsJsonObject();
+                        Boolean boolToggle = obj.get("Success").getAsBoolean();
+                        String authMessage = obj.get("Message").getAsString();
+
+                        return new Pair<Boolean, String>(boolToggle, authMessage);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Validate Passcode: ", "Exception found during JSON conversion.");
+                        e.printStackTrace();
+                        return new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                    }
+                }
+                catch (IOException e)
+                {
+                    Log.i("Validate Passcode: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    return new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                }
+                catch (JSONException e)
+                {
+                    Log.i("Validate Passcode: ", "Exception found during JSON request.");
+                    e.printStackTrace();
+                    return new Pair<Boolean, String>(false, "Error: Exception found during JSON request.");
+                }
+            }
+        };
+
+        joinTournament.execute();
+
+        try
+        {
+            return joinTournament.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Validate Passcode: ", "There was an error getting the validating the passcode.");
+            e.printStackTrace();
+            return new Pair<Boolean, String>(false, "Error: Issue validating the passcode.");
+        }
+    }
+
     public Pair<Boolean, String> joinTournament(final String tID, final String uID)
     {
         AsyncTask<String, Integer, Pair<Boolean, String>> joinTournament = new AsyncTask<String, Integer, Pair<Boolean, String>>()
@@ -582,10 +663,10 @@ public class NetworkRequests
                 try
                 {
                     HttpClient client = new DefaultHttpClient();
-                    HttpPost request = new HttpPost("http://www.memnochdacoder.com/addUserToTournament/" + uID + "/" + tID);
+                    HttpPost request = new HttpPost("http://www.memnochdacoder.com/addUserToTournament");
                     JSONObject jsonObject = new JSONObject();
 
-                    jsonObject.accumulate("userName", uID);
+                    jsonObject.accumulate("userID", uID);
                     jsonObject.accumulate("tournamentID", tID);
 
                     String json = jsonObject.toString();
@@ -953,6 +1034,82 @@ public class NetworkRequests
             Log.e("Player Name: ", "There was an error getting the user leaderboard.");
             e.printStackTrace();
             return new Pair<Boolean, String>(false, "Error: General error retrieving the user name.");
+        }
+    }
+
+    public ArrayList<String> getParValues(final String tid)
+    {
+        AsyncTask<String, Integer, ArrayList<String>> getTournamentListForJoin = new AsyncTask<String, Integer, ArrayList<String>>()
+        {
+            @Override
+            protected ArrayList<String> doInBackground(String... params)
+            {
+                String contentString = "";
+                ArrayList<String> tournamentData = new ArrayList<String>();
+
+                try
+                {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpGet request = new HttpGet("http://www.memnochdacoder.com/getParValues/" + tid);
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    HttpResponse response = client.execute(request);
+
+                    InputStream content = response.getEntity().getContent();
+
+                    BufferedReader httpReader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+
+                    while ((line = httpReader.readLine()) != null)
+                        contentString += line;
+
+                    try
+                    {
+                        if (contentString.length() <= 0)
+                            return new ArrayList<String>();
+
+                        if(contentString.contains("Error:"))
+                        {
+                            return tournamentData;
+                        }
+
+                        JSONArray jsonArray = new JSONArray(contentString);
+
+                        //Iterate through the array and get the info in a format we can use.
+                        for(int arrayIndex = 0; arrayIndex < jsonArray.length(); arrayIndex++)
+                        {
+                            tournamentData.add(jsonArray.getString(arrayIndex));
+                        }
+
+                        return tournamentData;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Get Tournament Data: ", "Exception found during JSON conversion.");
+                        e.printStackTrace();
+                        return new ArrayList<String>();
+                    }
+                }
+                catch (IOException e)
+                {
+                    Log.i("Get Tournament Data: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    return new ArrayList<String>();
+                }
+            }
+        };
+
+        getTournamentListForJoin.execute();
+
+        try
+        {
+            return getTournamentListForJoin.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Get Tournament Data: ", "There was an error getting the user ID.");
+            e.printStackTrace();
+            return new ArrayList<String>();
         }
     }
 }

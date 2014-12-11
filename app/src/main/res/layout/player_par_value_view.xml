@@ -52,12 +52,14 @@
         android:ems="10"
         android:inputType="number"
         android:gravity="center_horizontal"
-        android:text="3"
         />
 
     <TextView
+        android:id="@+id/parValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/parEntry"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/apptheme_textfield_default_holo_light"/>
 </RelativeLayout>

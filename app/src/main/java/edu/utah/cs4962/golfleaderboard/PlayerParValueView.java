@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -54,7 +55,11 @@ public class PlayerParValueView extends Fragment
         if(args == null)
             Toast.makeText(getActivity().getApplicationContext(), "The args are empty.", Toast.LENGTH_LONG).show();
         else
-            _position = args.getInt(SetupTournamentValues.ParValueFragment.ARG_OBJECT) - 1;
+        {
+            _position = args.getInt(PlayerTournamentValues.PlayerParValueFragment.ARG_OBJECT) - 1;
+            TextView parValueTextBox = (TextView) v.findViewById(R.id.parValue);
+            parValueTextBox.setText(args.getString(PlayerTournamentValues.PlayerParValueFragment.PAR_OBJECT));
+        }
 
         return v;
     }
