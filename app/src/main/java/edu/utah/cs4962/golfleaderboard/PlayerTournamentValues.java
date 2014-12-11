@@ -44,6 +44,7 @@ public class PlayerTournamentValues extends FragmentActivity
         setLeaderboardView();
 
         getParValues();
+        getPlayerParValues();
 
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
@@ -51,9 +52,6 @@ public class PlayerTournamentValues extends FragmentActivity
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(_parFragmentAdapter);
-
-        for (int i = 0; i < 18; i++)
-            _parValues.add(0);
     }
 
     public class PlayerParFragmentAdapter extends FragmentStatePagerAdapter
@@ -74,6 +72,7 @@ public class PlayerTournamentValues extends FragmentActivity
 
             args.putInt(PlayerParValueFragment.ARG_OBJECT, i + 1);
             args.putString(PlayerParValueFragment.PAR_OBJECT, "Par for current hole:\n" + _tournamentValues.get(i));
+            args.putInt(PlayerParValueFragment.PLAYER_PAR_VALUE, _parValues.get(i));
             fragment.setArguments(args);
             return fragment;
         }
@@ -95,6 +94,7 @@ public class PlayerTournamentValues extends FragmentActivity
     {
         public static final String ARG_OBJECT = "object";
         public static final String PAR_OBJECT = "ParValue";
+        public static final String PLAYER_PAR_VALUE = "PlayerScore";
 
         @Override
         public View onCreateView(LayoutInflater inflater,
@@ -107,7 +107,7 @@ public class PlayerTournamentValues extends FragmentActivity
             Bundle args = getArguments();
             ((TextView) rootView.findViewById(R.id.parEntry)).setText(
                     Integer.toString(args.getInt(ARG_OBJECT)));
-            ((TextView) rootView.findViewById(R.id.parEntry)).setText("0");
+            ((TextView) rootView.findViewById(R.id.parEntry)).setText(args.getInt("PlayerScore"));
             return rootView;
         }
     }
@@ -244,5 +244,11 @@ public class PlayerTournamentValues extends FragmentActivity
             for (int i = 0; i < 18; i++)
                 _tournamentValues.add("0");
         }
+    }
+
+    public void getPlayerParValues()
+    {
+        NetworkRequests nr = new NetworkRequests();
+        _parValues = nr.getPlayerParValues(getTournamentID(), getUserID());
     }
 }
