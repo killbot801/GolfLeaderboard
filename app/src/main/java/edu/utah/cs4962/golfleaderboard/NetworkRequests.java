@@ -568,6 +568,90 @@ public class NetworkRequests
         }
     }
 
+    public ArrayList<String> getAccountData(final String uid)
+    {
+        AsyncTask<String, Integer, ArrayList<String>> getAccountData = new AsyncTask<String, Integer, ArrayList<String>>()
+        {
+            @Override
+            protected ArrayList<String> doInBackground(String... params)
+            {
+                String contentString = "";
+                ArrayList<String> accountData = new ArrayList<String>();
+
+                try
+                {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpPost request = new HttpPost("http://www.memnochdacoder.com/getAccount");
+                    JSONObject jsonObject = new JSONObject();
+
+                    jsonObject.accumulate("uid", uid);
+
+                    String json = jsonObject.toString();
+
+                    request.setEntity(new StringEntity(json));
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    HttpResponse response = client.execute(request);
+
+                    InputStream content = response.getEntity().getContent();
+
+                    BufferedReader httpReader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+
+                    while ((line = httpReader.readLine()) != null)
+                        contentString += line;
+
+                    try
+                    {
+                        if (contentString.length() <= 0)
+                            return new ArrayList<>();
+
+                        JSONArray jsonArray = new JSONArray(contentString);
+
+                        //Iterate through the array and get the info in a format we can use.
+                        for(int arrayIndex = 0; arrayIndex < jsonArray.length(); arrayIndex++)
+                        {
+                            accountData.add(jsonArray.getString(arrayIndex));
+                        }
+
+                        return accountData;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Get Account Data: ", "Exception found during JSON conversion.");
+                        e.printStackTrace();
+                        return new ArrayList<>();
+                    }
+                }
+                catch (IOException e)
+                {
+                    Log.i("Get Account Data: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    return new ArrayList<>();
+                }
+                catch (JSONException e)
+                {
+                    Log.i("Get Account Data: ", "Exception found during JSON conversion.");
+                    e.printStackTrace();
+                    return new ArrayList<>();
+                }
+            }
+        };
+
+        getAccountData.execute();
+
+        try
+        {
+            return getAccountData.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Get Tournament Data: ", "There was an error getting the user ID.");
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     public Pair<Boolean, String> validateTournamentPasscode(final String tID, final String passcode)
     {
         AsyncTask<String, Integer, Pair<Boolean, String>> joinTournament = new AsyncTask<String, Integer, Pair<Boolean, String>>()

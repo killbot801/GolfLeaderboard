@@ -37,14 +37,14 @@
                 android:text="@string/pictureLabel"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/btnIntend"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_toRightOf="@+id/pictureLabel"
                 android:layout_marginLeft="50dp"
                 android:background="@drawable/default_user"
-                />
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:id="@+id/passwordText"
