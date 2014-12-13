@@ -102,6 +102,12 @@ public class JoinTournament extends Activity
             startActivity(intent);
         }
 
+        else if (id == R.id.edit_account)
+        {
+            Intent intent = new Intent(getApplicationContext(), EditAccount.class);
+            startActivity(intent);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
