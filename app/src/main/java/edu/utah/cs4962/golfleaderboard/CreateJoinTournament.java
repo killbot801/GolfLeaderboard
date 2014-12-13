@@ -57,6 +57,11 @@ public class CreateJoinTournament extends Activity
             Intent intent = new Intent(getApplicationContext(), CreateTournament.class);
             startActivity(intent);
         }
+        else if (id == R.id.edit_account)
+        {
+            Intent intent = new Intent(getApplicationContext(), EditAccount.class);
+            startActivity(intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -80,6 +85,12 @@ public class CreateJoinTournament extends Activity
     public void openJoinTournament()
     {
         Intent intent = new Intent(this, JoinTournament.class);
+        startActivity(intent);
+    }
+
+    public void launchEditAccount(View v)
+    {
+        Intent intent = new Intent(getApplicationContext(), EditAccount.class);
         startActivity(intent);
     }
 }

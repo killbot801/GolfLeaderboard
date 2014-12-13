@@ -33,6 +33,20 @@
     <string name="editAccount">Update</string>
     <string name="pictureLabel">Change\nPicture:</string>
     <string name="cannot">Cannot</string>
+    <string name="place1">1</string>
+    <string name="userNameHolder">USERNAME</string>
+    <string name="scoreHolder">000</string>
+    <string name="place2">2</string>
+    <string name="place3">3</string>
+    <string name="place4">4</string>
+    <string name="place5">5</string>
+    <string name="place6">6</string>
+    <string name="place7">7</string>
+    <string name="place8">8</string>
+    <string name="place9">9</string>
+    <string name="place10">10</string>
+    <string name="leaderboardBack">Back</string>
+    <string name="editAccountButton">Edit Account</string>
 
     <string-array name="states">
         <item>AL</item>

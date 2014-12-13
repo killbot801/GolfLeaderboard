@@ -245,4 +245,10 @@ public class PlayerTournamentValues extends FragmentActivity
                 _tournamentValues.add("0");
         }
     }
+
+    public void launchLeaderboard(View v)
+    {
+        Intent intent = new Intent(getApplicationContext(), LeaderBoard.class);
+        startActivity(intent);
+    }
 }

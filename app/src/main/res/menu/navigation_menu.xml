@@ -17,4 +17,8 @@
           android:title="@string/joinTournament"
           android:orderInCategory="4"
           android:showAsAction="never"/>
+    <item android:id="@+id/edit_account"
+          android:title="@string/editAccountButton"
+          android:orderInCategory="5"
+          android:showAsAction="never"/>
 </menu>

@@ -46,7 +46,7 @@ public class MainActivity extends Activity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -144,6 +144,18 @@ public class MainActivity extends Activity
             if (!file.exists())
             {
                 BufferedWriter buffWriter = new BufferedWriter(new FileWriter(file, true));
+                Gson gson = new Gson();
+                Type type = new TypeToken<String>()
+                {
+                }.getType();
+                String json = gson.toJson(_userID, type);
+                buffWriter.write(json);
+                buffWriter.newLine();
+                buffWriter.close();
+            }
+            else
+            {
+                BufferedWriter buffWriter = new BufferedWriter(new FileWriter(file, false));
                 Gson gson = new Gson();
                 Type type = new TypeToken<String>()
                 {

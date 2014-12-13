@@ -1196,4 +1196,97 @@ public class NetworkRequests
             return new ArrayList<String>();
         }
     }
+
+    //TODO GET updateAvatar working
+    public Pair<Boolean, String> updateAvatar(final String userID, final String avatarPath)
+    {
+        return null;
+    }
+
+    public Pair<Boolean, String> editAccount(final String userID, final String fname, final String lname, final String email, final String city, final String state, final String password, final String avatarPath)
+    {
+        AsyncTask<String, Integer, Pair<Boolean, String>> editAccount = new AsyncTask<String, Integer, Pair<Boolean, String>>()
+        {
+            @Override
+            protected Pair<Boolean, String> doInBackground(String... params)
+            {
+                String contentString = "";
+
+                try
+                {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpPost request = new HttpPost("http://www.memnochdacoder.com/updatePlayerData");
+                    JSONObject jsonObject = new JSONObject();
+
+                    jsonObject.accumulate("uid", userID);
+                    jsonObject.accumulate("fName", fname);
+                    jsonObject.accumulate("lName", lname);
+                    jsonObject.accumulate("email", email);
+                    jsonObject.accumulate("city", city);
+                    jsonObject.accumulate("state", state);
+                    jsonObject.accumulate("passCode", password);
+                    jsonObject.accumulate("avatarPath", avatarPath);
+
+                    String json = jsonObject.toString();
+
+                    request.setEntity(new StringEntity(json));
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    HttpResponse response = client.execute(request);
+
+                    InputStream content = response.getEntity().getContent();
+
+                    BufferedReader httpReader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+
+                    while ((line = httpReader.readLine()) != null)
+                        contentString += line;
+
+                    try
+                    {
+                        if (contentString.length() <= 0)
+                            return new Pair<>(false, "Error: Return value from server empty.");
+
+                        JsonElement ele = new JsonParser().parse(contentString);
+                        JsonObject obj = ele.getAsJsonObject();
+                        Boolean boolToggle = obj.get("Success").getAsBoolean();
+                        String authMessage = obj.get("Message").getAsString();
+
+                        return new Pair<>(boolToggle, authMessage);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Update Player Data: ", "Exception found during JSON conversion.");
+                        e.printStackTrace();
+                        return new Pair<>(false, "Error: Exception found during JSON conversion.");
+                    }
+                }
+                catch (IOException e)
+                {
+                    Log.i("Update Player Data: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    return new Pair<>(false, "Error: Exception found during HTTP request.");
+                }
+                catch (JSONException e)
+                {
+                    Log.i("Update Player Data: ", "Exception found during JSON setup.");
+                    e.printStackTrace();
+                    return new Pair<>(false, "Error: Exception setting up the network call.");
+                }
+            }
+        };
+
+        editAccount.execute();
+
+        try
+        {
+            return editAccount.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Update Player Data: ", "There was an error updating user data.");
+            e.printStackTrace();
+            return new Pair<>(false, "Error: There was an error updating user data.");
+        }
+    }
 }

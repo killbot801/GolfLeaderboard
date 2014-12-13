@@ -32,4 +32,16 @@
         android:onClick="launchJoinTournament"
         />
 
+    <Button
+        android:id="@+id/editAccountButton"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/apptheme_btn_default_normal_holo_light"
+        android:layout_below="@id/joinTournamentButton"
+        android:text="@string/editAccountButton"
+        android:onClick="launchEditAccount"
+        />
+
 </RelativeLayout>

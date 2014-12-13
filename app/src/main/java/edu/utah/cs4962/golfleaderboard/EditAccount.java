@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +24,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.Ion;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,15 +49,19 @@ public class EditAccount extends Activity
     EditText _city;
     EditText _state;
     EditText _email;
-    String _avatarPath;
+    String   _avatarPath;
+
+    String _userID;
+
+    ArrayList<String> _grabbedAccountData;
 
     private AlbumStorageDirFactory _mAlbumStorageDirFactory = null;
 
     ImageView _picButton;
     private String _currentPhotoPath;
-    private static final String JPEG_FILE_PREFIX = "IMG_";
-    private static final String JPEG_FILE_SUFFIX = ".jpg";
-    private static final int ACTION_TAKE_PHOTO = 1;
+    private static final String JPEG_FILE_PREFIX  = "IMG_";
+    private static final String JPEG_FILE_SUFFIX  = ".jpg";
+    private static final int    ACTION_TAKE_PHOTO = 1;
 
 
     @Override
@@ -82,14 +92,14 @@ public class EditAccount extends Activity
     private void getAccountData()
     {
         NetworkRequests nr = new NetworkRequests();
-        ArrayList<String> data = nr.getAccountData("1");
-        _firstName.setText(data.get(0));
-        _lastName.setText(data.get(1));
-        _email.setText(data.get(2));
-        _city.setText(data.get(3));
-        _state.setText(data.get(4));
-        _password.setText(data.get(5));
-        _avatarPath = data.get(6);
+        _grabbedAccountData = nr.getAccountData(_userID);
+        _firstName.setText(_grabbedAccountData.get(0));
+        _lastName.setText(_grabbedAccountData.get(1));
+        _email.setText(_grabbedAccountData.get(2));
+        _city.setText(_grabbedAccountData.get(3));
+        _state.setText(_grabbedAccountData.get(4));
+        _password.setText(_grabbedAccountData.get(5));
+        _avatarPath = _grabbedAccountData.get(6);
         //image is index 6
     }
 
@@ -97,7 +107,7 @@ public class EditAccount extends Activity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_menu, menu);
+        //getMenuInflater().inflate(R.menu.navigation_menu, menu);
         return true;
     }
 
@@ -142,6 +152,7 @@ public class EditAccount extends Activity
         _state = (EditText) findViewById(R.id.stateEntry);
         _email = (EditText) findViewById(R.id.emailEntry);
         _avatarPath = "";
+        _userID = getUserID();
     }
 
     private void setBtnListenerOrDisable(ImageView btn, Button.OnClickListener onClickListener, String intentName)
@@ -196,8 +207,20 @@ public class EditAccount extends Activity
         if (_currentPhotoPath != null)
         {
             setPic();
+            _avatarPath = _currentPhotoPath;
             galleryAddPic();
-            //TODO: ADD CALL TO UPDATE PATH IN SQL
+            //
+            //            NetworkRequests nr = new NetworkRequests();
+            //            Pair<Boolean, String> response = nr.editAccount(_userID, _firstName.getText().toString(), _lastName.getText().toString(), _email.getText().toString(), _city.getText().toString(), _state.getText().toString(), _password.getText().toString(), _avatarPath);
+            //            if (response.first)
+            //            {
+            //                Intent intent = new Intent(getApplicationContext(), CreateJoinTournament.class);
+            //                startActivity(intent);
+            //                Toast.makeText(getApplicationContext(), response.second, Toast.LENGTH_SHORT).show();
+            //            }
+            //            else
+            //                Toast.makeText(getApplicationContext(), response.second, Toast.LENGTH_SHORT).show();
+
             _currentPhotoPath = null;
         }
 
@@ -289,6 +312,44 @@ public class EditAccount extends Activity
 
     public void updateAccount(View view)
     {
-        Toast.makeText(getApplicationContext(), "HERRO", Toast.LENGTH_SHORT).show();
+
+        NetworkRequests nr = new NetworkRequests();
+        Pair<Boolean, String> response = nr.editAccount(_userID, _firstName.getText().toString(), _lastName.getText().toString(), _email.getText().toString(), _city.getText().toString(), _state.getText().toString(), _password.getText().toString(), _avatarPath);
+        if (response.first)
+        {
+            Intent intent = new Intent(getApplicationContext(), CreateJoinTournament.class);
+            startActivity(intent);
+            Toast.makeText(getApplicationContext(), response.second, Toast.LENGTH_SHORT).show();
+        }
+        else
+            Toast.makeText(getApplicationContext(), response.second, Toast.LENGTH_SHORT).show();
+    }
+
+    public String getUserID()
+    {
+        String returnValue = "";
+
+        try
+        {
+            File file = new File(getApplicationContext().getFilesDir(), "GTourny.txt");
+            FileReader textReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(textReader);
+            String line = null;
+            line = bufferedReader.readLine();
+            Gson gson = new Gson();
+            Type type = new TypeToken<String>()
+            {
+            }.getType();
+
+            returnValue = gson.fromJson(line, type);
+
+            bufferedReader.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return returnValue;
     }
 }

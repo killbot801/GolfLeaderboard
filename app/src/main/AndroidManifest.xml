@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="edu.utah.cs4962.golfleaderboard.EditAccount"
+            android:name="edu.utah.cs4962.golfleaderboard.MainActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize">
             <intent-filter>
@@ -37,11 +37,14 @@
         <activity android:name=".JoinSelect"
                   android:label="Join Tournament"
                   android:configChanges="orientation|screenSize"/>
-<!--        <activity android:name=".EditAccount"
+        <activity android:name=".EditAccount"
                   android:label="Edit Account Information"
-                  android:configChanges="orientation|screenSize"/>-->
+                  android:configChanges="orientation|screenSize"/>
         <activity android:name=".PlayerTournamentValues"
                   android:label="Enter Score for Hole"
+                  android:configChanges="orientation|screenSize"/>
+        <activity android:name=".LeaderBoard"
+                  android:label="Leaderboard"
                   android:configChanges="orientation|screenSize"/>
     </application>
 
