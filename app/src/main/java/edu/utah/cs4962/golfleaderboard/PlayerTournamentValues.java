@@ -1,6 +1,5 @@
 package edu.utah.cs4962.golfleaderboard;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,10 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -33,9 +30,9 @@ public class PlayerTournamentValues extends FragmentActivity
     // representing an object in the collection.
     PlayerParFragmentAdapter _parFragmentAdapter;
     ViewPager mViewPager;
-    ArrayList<Integer> _parValues;
     ArrayList<String> _tournamentValues;
     ArrayList<Pair<String, Integer>> _leaderboard;
+    ArrayList<Integer> _playerHoleValues;
 
     public void onCreate(Bundle savedInstanceState)
     {
@@ -44,6 +41,7 @@ public class PlayerTournamentValues extends FragmentActivity
         setLeaderboardView();
 
         getParValues();
+        getPlayerParValues();
 
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
@@ -52,8 +50,10 @@ public class PlayerTournamentValues extends FragmentActivity
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(_parFragmentAdapter);
 
-        for (int i = 0; i < 18; i++)
-            _parValues.add(0);
+        if(getResources().getConfiguration().orientation == 1)
+            findViewById(R.id.leaderboardTextView).setVisibility(View.VISIBLE);
+        else
+            findViewById(R.id.leaderboardTextView).setVisibility(View.GONE);
     }
 
     public class PlayerParFragmentAdapter extends FragmentStatePagerAdapter
@@ -68,12 +68,11 @@ public class PlayerTournamentValues extends FragmentActivity
         {
             Fragment fragment = new PlayerParValueView();
 
-            getParValues();
-
             Bundle args = new Bundle();
 
             args.putInt(PlayerParValueFragment.ARG_OBJECT, i + 1);
             args.putString(PlayerParValueFragment.PAR_OBJECT, "Par for current hole:\n" + _tournamentValues.get(i));
+            args.putInt(PlayerParValueFragment.PLAYER_PAR_VALUE, _playerHoleValues.get(i));
             fragment.setArguments(args);
             return fragment;
         }
@@ -95,6 +94,7 @@ public class PlayerTournamentValues extends FragmentActivity
     {
         public static final String ARG_OBJECT = "object";
         public static final String PAR_OBJECT = "ParValue";
+        public static final String PLAYER_PAR_VALUE = "PlayerScore";
 
         @Override
         public View onCreateView(LayoutInflater inflater,
@@ -107,7 +107,7 @@ public class PlayerTournamentValues extends FragmentActivity
             Bundle args = getArguments();
             ((TextView) rootView.findViewById(R.id.parEntry)).setText(
                     Integer.toString(args.getInt(ARG_OBJECT)));
-            ((TextView) rootView.findViewById(R.id.parEntry)).setText("0");
+            ((TextView) rootView.findViewById(R.id.parEntry)).setText(args.getInt(PLAYER_PAR_VALUE));
             return rootView;
         }
     }
@@ -117,18 +117,18 @@ public class PlayerTournamentValues extends FragmentActivity
         //This is what will be needed for the updates on the user's tournament values page.
         int pos = mViewPager.getCurrentItem();
         PlayerParValueView parValue = (PlayerParValueView) _parFragmentAdapter.getItem(pos);
-        int currentHoleValue = parValue._editTextValue;
+        int currentHoleValue = _playerHoleValues.get(pos);
         int currentHole = pos + 1;
 
         NetworkRequests nr = new NetworkRequests();
         Pair<Boolean, String> serverReturnValue = nr.updatePlayerScore(getUserID(), getTournamentID(), currentHoleValue, currentHole);
-
+        setLeaderboardView();
         Toast.makeText(getApplicationContext(), serverReturnValue.second, Toast.LENGTH_LONG).show();
     }
 
     public void setParValueArray(int pos, int value)
     {
-        _parValues.set(pos, value);
+        _playerHoleValues.set(pos, value);
     }
 
     public String getUserID()
@@ -140,7 +140,7 @@ public class PlayerTournamentValues extends FragmentActivity
             File file = new File(getApplicationContext().getFilesDir(), "GTourny.txt");
             FileReader textReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(textReader);
-            String line = null;
+            String line;
             line = bufferedReader.readLine();
             Gson gson = new Gson();
             Type type = new TypeToken<String>()
@@ -246,9 +246,11 @@ public class PlayerTournamentValues extends FragmentActivity
         }
     }
 
-    public void launchLeaderboard(View v)
+    public void getPlayerParValues()
     {
-        Intent intent = new Intent(getApplicationContext(), LeaderBoard.class);
-        startActivity(intent);
+        String tid = getTournamentID();
+        String uid = getUserID();
+        NetworkRequests nr = new NetworkRequests();
+        _playerHoleValues = nr.getPlayerParValues(tid, uid);
     }
 }

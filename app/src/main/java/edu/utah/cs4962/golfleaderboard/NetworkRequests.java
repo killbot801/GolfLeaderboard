@@ -36,8 +36,6 @@ import java.util.List;
 public class NetworkRequests
 {
     public static NetworkRequests _instance = null;
-    public String _userID;
-    public String _tournamentID;
 
     public static NetworkRequests getNetworkRequestInstance()
     {
@@ -83,14 +81,14 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+                            return new Pair<>(false, "Error: No data returned from server.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        loginStatus = new Pair<Boolean, String>(boolToggle, authMessage);
+                        loginStatus = new Pair<>(boolToggle, authMessage);
 
                         return loginStatus;
                     }
@@ -98,7 +96,7 @@ public class NetworkRequests
                     {
                         Log.i("Authenticate Login: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        loginStatus = new Pair<Boolean, String>(false, "Authenticate Login: Exception found during JSON conversion.");
+                        loginStatus = new Pair<>(false, "Authenticate Login: Exception found during JSON conversion.");
                         return loginStatus;
                     }
                 }
@@ -106,14 +104,14 @@ public class NetworkRequests
                 {
                     Log.i("Authenticate Login: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    loginStatus = new Pair<Boolean, String>(false, "Authenticate Login: Exception found during HTTP request.");
+                    loginStatus = new Pair<>(false, "Authenticate Login: Exception found during HTTP request.");
                     return loginStatus;
                 }
                 catch (JSONException e)
                 {
                     Log.i("Authenticate Login: ", "Exception found during JSON setup.");
                     e.printStackTrace();
-                    loginStatus = new Pair<Boolean, String>(false, "Authenticate Login: Exception found during JSON conversion.");
+                    loginStatus = new Pair<>(false, "Authenticate Login: Exception found during JSON conversion.");
                     return loginStatus;
                 }
             }
@@ -129,7 +127,7 @@ public class NetworkRequests
         {
             Log.e("Authenticate Login: ", "There was an error authenticating the login.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: Could not authenticate login.");
+            return new Pair<>(false, "Error: Could not authenticate login.");
         }
     }
 
@@ -162,17 +160,17 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+                            return new Pair<>(false, "Error: No data returned from server.");
 
                         if(contentString.equals("404"))
-                            return new Pair<Boolean, String>(false, "Error: Username reports as incorrect.");
+                            return new Pair<>(false, "Error: Username reports as incorrect.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        loginStatus = new Pair<Boolean, String>(boolToggle, authMessage);
+                        loginStatus = new Pair<>(boolToggle, authMessage);
 
                         return loginStatus;
                     }
@@ -180,7 +178,7 @@ public class NetworkRequests
                     {
                         Log.i("Get User ID: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        loginStatus = new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                        loginStatus = new Pair<>(false, "Error: Exception found during JSON conversion.");
                         return loginStatus;
                     }
                 }
@@ -188,7 +186,7 @@ public class NetworkRequests
                 {
                     Log.i("Get User ID: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    loginStatus = new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                    loginStatus = new Pair<>(false, "Error: Exception found during HTTP request.");
                     return loginStatus;
                 }
             }
@@ -204,7 +202,7 @@ public class NetworkRequests
         {
             Log.e("Get User ID: ", "There was an error getting the user ID.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: Could not get user ID.");
+            return new Pair<>(false, "Error: Could not get user ID.");
         }
     }
 
@@ -249,14 +247,14 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+                            return new Pair<>(false, "Error: No data returned from server.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        addUserStatus = new Pair<Boolean, String>(boolToggle, authMessage);
+                        addUserStatus = new Pair<>(boolToggle, authMessage);
 
                         return addUserStatus;
                     }
@@ -264,7 +262,7 @@ public class NetworkRequests
                     {
                         Log.i("Add New User: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                        addUserStatus = new Pair<>(false, "Error: Exception found during JSON conversion.");
                         return addUserStatus;
                     }
                 }
@@ -272,14 +270,14 @@ public class NetworkRequests
                 {
                     Log.i("Add New User: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                    addUserStatus = new Pair<>(false, "Error: Exception found during HTTP request.");
                     return addUserStatus;
                 }
                 catch (JSONException e)
                 {
                     Log.i("Add New User: ", "Exception found during JSON setup.");
                     e.printStackTrace();
-                    addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                    addUserStatus = new Pair<>(false, "Error: Exception found during JSON conversion.");
                     return addUserStatus;
                 }
             }
@@ -295,7 +293,7 @@ public class NetworkRequests
         {
             Log.e("Add New User: ", "There was an error authenticating the login.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: Could not authenticate login.");
+            return new Pair<>(false, "Error: Could not authenticate login.");
         }
     }
 
@@ -340,14 +338,14 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+                            return new Pair<>(false, "Error: No data returned from server.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        addUserStatus = new Pair<Boolean, String>(boolToggle, authMessage);
+                        addUserStatus = new Pair<>(boolToggle, authMessage);
 
                         return addUserStatus;
                     }
@@ -355,7 +353,7 @@ public class NetworkRequests
                     {
                         Log.i("Add New User: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                        addUserStatus = new Pair<>(false, "Error: Exception found during JSON conversion.");
                         return addUserStatus;
                     }
                 }
@@ -363,14 +361,14 @@ public class NetworkRequests
                 {
                     Log.i("Add New User: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                    addUserStatus = new Pair<>(false, "Error: Exception found during HTTP request.");
                     return addUserStatus;
                 }
                 catch (JSONException e)
                 {
                     Log.i("Add New User: ", "Exception found during JSON setup.");
                     e.printStackTrace();
-                    addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                    addUserStatus = new Pair<>(false, "Error: Exception found during JSON conversion.");
                     return addUserStatus;
                 }
             }
@@ -386,7 +384,7 @@ public class NetworkRequests
         {
             Log.e("Add New User: ", "There was an error authenticating the login.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: Could not authenticate login.");
+            return new Pair<>(false, "Error: Could not authenticate login.");
         }
     }
 
@@ -439,14 +437,14 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+                            return new Pair<>(false, "Error: No data returned from server.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        addUserStatus = new Pair<Boolean, String>(boolToggle, authMessage);
+                        addUserStatus = new Pair<>(boolToggle, authMessage);
 
                         return addUserStatus;
                     }
@@ -454,7 +452,7 @@ public class NetworkRequests
                     {
                         Log.i("Add Tournament: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                        addUserStatus = new Pair<>(false, "Error: Exception found during JSON conversion.");
                         return addUserStatus;
                     }
                 }
@@ -462,14 +460,14 @@ public class NetworkRequests
                 {
                     Log.i("Add Tournament: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                    addUserStatus = new Pair<>(false, "Error: Exception found during HTTP request.");
                     return addUserStatus;
                 }
                 catch (JSONException e)
                 {
                     Log.i("Add Tournament: ", "Exception found during JSON setup.");
                     e.printStackTrace();
-                    addUserStatus = new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                    addUserStatus = new Pair<>(false, "Error: Exception found during JSON conversion.");
                     return addUserStatus;
                 }
             }
@@ -485,7 +483,7 @@ public class NetworkRequests
         {
             Log.e("Add Tournament: ", "There was an error adding the tournament.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: Could not add the tournament, please try again.");
+            return new Pair<>(false, "Error: Could not add the tournament, please try again.");
         }
     }
 
@@ -519,7 +517,7 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new ArrayList<TournamentItem>();
+                            return new ArrayList<>();
 
                         if(contentString.contains("Error:"))
                         {
@@ -544,14 +542,14 @@ public class NetworkRequests
                     {
                         Log.i("Get Tournament Data: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        return new ArrayList<TournamentItem>();
+                        return new ArrayList<>();
                     }
                 }
                 catch (IOException e)
                 {
                     Log.i("Get Tournament Data: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    return new ArrayList<TournamentItem>();
+                    return new ArrayList<>();
                 }
             }
         };
@@ -566,7 +564,7 @@ public class NetworkRequests
         {
             Log.e("Get Tournament Data: ", "There was an error getting the user ID.");
             e.printStackTrace();
-            return new ArrayList<TournamentItem>();
+            return new ArrayList<>();
         }
     }
 
@@ -690,33 +688,33 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+                            return new Pair<>(false, "Error: No data returned from server.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        return new Pair<Boolean, String>(boolToggle, authMessage);
+                        return new Pair<>(boolToggle, authMessage);
                     }
                     catch (Exception e)
                     {
                         Log.i("Validate Passcode: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        return new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                        return new Pair<>(false, "Error: Exception found during JSON conversion.");
                     }
                 }
                 catch (IOException e)
                 {
                     Log.i("Validate Passcode: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    return new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                    return new Pair<>(false, "Error: Exception found during HTTP request.");
                 }
                 catch (JSONException e)
                 {
                     Log.i("Validate Passcode: ", "Exception found during JSON request.");
                     e.printStackTrace();
-                    return new Pair<Boolean, String>(false, "Error: Exception found during JSON request.");
+                    return new Pair<>(false, "Error: Exception found during JSON request.");
                 }
             }
         };
@@ -731,7 +729,7 @@ public class NetworkRequests
         {
             Log.e("Validate Passcode: ", "There was an error getting the validating the passcode.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: Issue validating the passcode.");
+            return new Pair<>(false, "Error: Issue validating the passcode.");
         }
     }
 
@@ -771,33 +769,33 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+                            return new Pair<>(false, "Error: No data returned from server.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        return new Pair<Boolean, String>(boolToggle, authMessage);
+                        return new Pair<>(boolToggle, authMessage);
                     }
                     catch (Exception e)
                     {
                         Log.i("Get Tournament Data: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        return new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                        return new Pair<>(false, "Error: Exception found during JSON conversion.");
                     }
                 }
                 catch (IOException e)
                 {
                     Log.i("Get Tournament Data: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    return new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                    return new Pair<>(false, "Error: Exception found during HTTP request.");
                 }
                 catch (JSONException e)
                 {
                     Log.i("Get Tournament Data: ", "Exception found during JSON request.");
                     e.printStackTrace();
-                    return new Pair<Boolean, String>(false, "Error: Exception found during JSON request.");
+                    return new Pair<>(false, "Error: Exception found during JSON request.");
                 }
             }
         };
@@ -812,7 +810,7 @@ public class NetworkRequests
         {
             Log.e("Join Tournament: ", "There was an error getting the tournament information.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: Issue retrieving join tournament information.");
+            return new Pair<>(false, "Error: Issue retrieving join tournament information.");
         }
     }
 
@@ -854,33 +852,33 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: Return value from server empty.");
+                            return new Pair<>(false, "Error: Return value from server empty.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        return new Pair<Boolean, String>(boolToggle, authMessage);
+                        return new Pair<>(boolToggle, authMessage);
                     }
                     catch (Exception e)
                     {
                         Log.i("Get Tournament Data: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        return new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                        return new Pair<>(false, "Error: Exception found during JSON conversion.");
                     }
                 }
                 catch (IOException e)
                 {
                     Log.i("Update Tournament Data: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    return new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                    return new Pair<>(false, "Error: Exception found during HTTP request.");
                 }
                 catch (JSONException e)
                 {
                     Log.i("Update Tournament Data: ", "Exception found during JSON setup.");
                     e.printStackTrace();
-                    return new Pair<Boolean, String>(false, "Error: Exception setting up the network call.");
+                    return new Pair<>(false, "Error: Exception setting up the network call.");
                 }
             }
         };
@@ -895,7 +893,7 @@ public class NetworkRequests
         {
             Log.e("Update Tournament Data: ", "There was an error update the tournament value.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: There was an error update the tournament value.");
+            return new Pair<>(false, "Error: There was an error update the tournament value.");
         }
     }
 
@@ -929,14 +927,14 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new ArrayList<Pair<String, Integer>>();
+                            return new ArrayList<>();
 
                         JSONArray jsonArray = new JSONArray(contentString);
 
                         //Iterate through the array and get the info in a format we can use.
                         for(int arrayIndex = 0; arrayIndex < jsonArray.length(); arrayIndex += 2)
                         {
-                            playerData = new Pair<String, Integer>(jsonArray.getString(arrayIndex), jsonArray.getInt(arrayIndex + 1));
+                            playerData = new Pair<>(jsonArray.getString(arrayIndex), jsonArray.getInt(arrayIndex + 1));
                             playerInfo.add(playerData);
                         }
 
@@ -946,14 +944,14 @@ public class NetworkRequests
                     {
                         Log.i("Get Tournament Leaderboard: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        return new ArrayList<Pair<String, Integer>>();
+                        return new ArrayList<>();
                     }
                 }
                 catch (IOException e)
                 {
                     Log.i("Get Tournament Leaderboard: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    return new ArrayList<Pair<String, Integer>>();
+                    return new ArrayList<>();
                 }
             }
         };
@@ -968,7 +966,7 @@ public class NetworkRequests
         {
             Log.e("Get Tournament Leaderboard: ", "There was an error getting the user leaderboard.");
             e.printStackTrace();
-            return new ArrayList<Pair<String, Integer>>();
+            return new ArrayList<>();
         }
     }
 
@@ -1008,33 +1006,33 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: Return value from server empty.");
+                            return new Pair<>(false, "Error: Return value from server empty.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        return new Pair<Boolean, String>(boolToggle, authMessage);
+                        return new Pair<>(boolToggle, authMessage);
                     }
                     catch (Exception e)
                     {
                         Log.i("Get Player Score: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        return new Pair<Boolean, String>(false, "Error: Exception found during JSON conversion.");
+                        return new Pair<>(false, "Error: Exception found during JSON conversion.");
                     }
                 }
                 catch (IOException e)
                 {
                     Log.i("Get Player Score: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    return new Pair<Boolean, String>(false, "Error: Exception found during HTTP request.");
+                    return new Pair<>(false, "Error: Exception found during HTTP request.");
                 }
                 catch (JSONException e)
                 {
                     Log.i("Get Player Score: ", "Exception found during JSON setup.");
                     e.printStackTrace();
-                    return new Pair<Boolean, String>(false, "Error: Exception setting up the network call.");
+                    return new Pair<>(false, "Error: Exception setting up the network call.");
                 }
             }
         };
@@ -1049,7 +1047,7 @@ public class NetworkRequests
         {
             Log.e("Get Player Score: ", "There was an error update the tournament value.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: There was an error update the tournament value.");
+            return new Pair<>(false, "Error: There was an error update the tournament value.");
         }
     }
 
@@ -1061,7 +1059,6 @@ public class NetworkRequests
             protected Pair<Boolean, String> doInBackground(String... params)
             {
                 String contentString = "";
-                Pair<Boolean, String> playerData;
 
                 try
                 {
@@ -1082,27 +1079,27 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new Pair<Boolean, String>(false, "Error: No data returned from server.");
+                            return new Pair<>(false, "Error: No data returned from server.");
 
                         JsonElement ele = new JsonParser().parse(contentString);
                         JsonObject obj = ele.getAsJsonObject();
                         Boolean boolToggle = obj.get("Success").getAsBoolean();
                         String authMessage = obj.get("Message").getAsString();
 
-                        return new Pair<Boolean, String>(boolToggle, authMessage);
+                        return new Pair<>(boolToggle, authMessage);
                     }
                     catch (Exception e)
                     {
                         Log.i("Player Name: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        return new Pair<Boolean, String>(false, "Error: JSON conversion failed.");
+                        return new Pair<>(false, "Error: JSON conversion failed.");
                     }
                 }
                 catch (IOException e)
                 {
                     Log.i("Player Name: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    return new Pair<Boolean, String>(false, "Error: Exception during HTTP request.");
+                    return new Pair<>(false, "Error: Exception during HTTP request.");
                 }
             }
         };
@@ -1117,7 +1114,7 @@ public class NetworkRequests
         {
             Log.e("Player Name: ", "There was an error getting the user leaderboard.");
             e.printStackTrace();
-            return new Pair<Boolean, String>(false, "Error: General error retrieving the user name.");
+            return new Pair<>(false, "Error: General error retrieving the user name.");
         }
     }
 
@@ -1150,7 +1147,7 @@ public class NetworkRequests
                     try
                     {
                         if (contentString.length() <= 0)
-                            return new ArrayList<String>();
+                            return new ArrayList<>();
 
                         if(contentString.contains("Error:"))
                         {
@@ -1171,14 +1168,14 @@ public class NetworkRequests
                     {
                         Log.i("Get Tournament Data: ", "Exception found during JSON conversion.");
                         e.printStackTrace();
-                        return new ArrayList<String>();
+                        return new ArrayList<>();
                     }
                 }
                 catch (IOException e)
                 {
                     Log.i("Get Tournament Data: ", "Exception found during HTTP request.");
                     e.printStackTrace();
-                    return new ArrayList<String>();
+                    return new ArrayList<>();
                 }
             }
         };
@@ -1193,7 +1190,94 @@ public class NetworkRequests
         {
             Log.e("Get Tournament Data: ", "There was an error getting the user ID.");
             e.printStackTrace();
-            return new ArrayList<String>();
+            return new ArrayList<>();
+        }
+    }
+
+    public ArrayList<Integer> getPlayerParValues(final String tid, final String userID)
+    {
+        AsyncTask<String, Integer, ArrayList<Integer>> getTournamentListForJoin = new AsyncTask<String, Integer, ArrayList<Integer>>()
+        {
+            @Override
+            protected ArrayList<Integer> doInBackground(String... params)
+            {
+                String contentString = "";
+                ArrayList<Integer> playerTournamentScore = new ArrayList<Integer>();
+
+                try
+                {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpPost request = new HttpPost("http://www.memnochdacoder.com/getPlayerParValues/");
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    JSONObject jsonObject = new JSONObject();
+
+                    jsonObject.accumulate("tid", tid);
+                    jsonObject.accumulate("uid", userID);
+
+                    String json = jsonObject.toString();
+
+                    request.setEntity(new StringEntity(json));
+                    request.setHeader("Accept", "application/json");
+                    request.setHeader("Content-Type", "application/json");
+                    HttpResponse response = client.execute(request);
+
+                    InputStream content = response.getEntity().getContent();
+
+                    BufferedReader httpReader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+
+                    while ((line = httpReader.readLine()) != null)
+                        contentString += line;
+
+                    try
+                    {
+                        if (contentString.length() <= 0)
+                            return new ArrayList<>();
+
+                        JSONArray jsonArray = new JSONArray(contentString);
+
+                        //Iterate through the array and get the info in a format we can use.
+                        for(int arrayIndex = 0; arrayIndex < jsonArray.length(); arrayIndex++)
+                        {
+                            playerTournamentScore.add(jsonArray.getInt(arrayIndex));
+                        }
+
+                        return playerTournamentScore;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.i("Get Player Hole Data: ", "Exception found during JSON conversion.");
+                        e.printStackTrace();
+                        return new ArrayList<>();
+                    }
+                }
+                catch (IOException e)
+                {
+                    Log.i("Get Player Hole Data: ", "Exception found during HTTP request.");
+                    e.printStackTrace();
+                    return new ArrayList<>();
+                }
+                catch (JSONException e)
+                {
+                    Log.i("Get Player Hole Data:", "Exception found during JSON retrieval.");
+                    e.printStackTrace();
+                    return new ArrayList<>();
+                }
+            }
+        };
+
+        getTournamentListForJoin.execute();
+
+        try
+        {
+            return getTournamentListForJoin.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Get Tournament Data: ", "There was an error getting the user ID.");
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 

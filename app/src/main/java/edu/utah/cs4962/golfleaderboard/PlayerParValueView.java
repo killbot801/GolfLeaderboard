@@ -32,6 +32,8 @@ public class PlayerParValueView extends Fragment
             {
                 String currentValue = _parValue.getText().toString();
                 int newValue = Integer.parseInt(currentValue) + 1;
+                _editTextValue = newValue;
+                Bundle valueBundle = new Bundle();
                 _parValue.setText(newValue + "");
                 ((PlayerTournamentValues) getActivity()).setParValueArray(_position, newValue);
             }
@@ -52,13 +54,15 @@ public class PlayerParValueView extends Fragment
 
         Bundle args = getArguments();
 
-        if(args == null)
+        if (args == null)
             Toast.makeText(getActivity().getApplicationContext(), "The args are empty.", Toast.LENGTH_LONG).show();
         else
         {
             _position = args.getInt(PlayerTournamentValues.PlayerParValueFragment.ARG_OBJECT) - 1;
             TextView parValueTextBox = (TextView) v.findViewById(R.id.parValue);
             parValueTextBox.setText(args.getString(PlayerTournamentValues.PlayerParValueFragment.PAR_OBJECT));
+            EditText playerHoleEntry = (EditText) v.findViewById(R.id.parEntry);
+            playerHoleEntry.setText(args.getInt(PlayerTournamentValues.PlayerParValueFragment.PLAYER_PAR_VALUE) + "");
         }
 
         return v;
