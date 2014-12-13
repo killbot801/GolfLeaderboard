@@ -101,7 +101,6 @@ public class JoinTournament extends Activity
             Intent intent = new Intent(getApplicationContext(), CreateTournament.class);
             startActivity(intent);
         }
-
         else if (id == R.id.edit_account)
         {
             Intent intent = new Intent(getApplicationContext(), EditAccount.class);

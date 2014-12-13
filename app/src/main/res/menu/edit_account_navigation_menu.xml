@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    tools:context=".MainActivity">
+    <item android:id="@+id/login"
+          android:title="Login Screen"
+          android:orderInCategory="1"
+          android:showAsAction="never"/>
+    <item android:id="@+id/create_account"
+          android:title="Create Account"
+          android:orderInCategory="2"
+          android:showAsAction="never"/>
+    <item android:id="@+id/create_tournament"
+          android:title="@string/createTourny"
+          android:orderInCategory="3"
+          android:showAsAction="never"/>
+    <item android:id="@+id/join_tournament"
+          android:title="@string/joinTournament"
+          android:orderInCategory="4"
+          android:showAsAction="never"/>
+</menu>

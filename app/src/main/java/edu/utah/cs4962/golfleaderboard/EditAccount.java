@@ -107,7 +107,7 @@ public class EditAccount extends Activity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.navigation_menu, menu);
+        getMenuInflater().inflate(R.menu.edit_account_navigation_menu, menu);
         return true;
     }
 
@@ -119,6 +119,7 @@ public class EditAccount extends Activity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //noinspection SimplifiableIfStatement
         if (id == R.id.login)
         {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
