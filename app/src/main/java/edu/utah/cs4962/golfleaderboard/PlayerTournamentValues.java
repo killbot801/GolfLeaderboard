@@ -253,4 +253,9 @@ public class PlayerTournamentValues extends FragmentActivity
         NetworkRequests nr = new NetworkRequests();
         _playerHoleValues = nr.getPlayerParValues(tid, uid);
     }
+
+    public void launchLeaderboard(View view)
+    {
+        Toast.makeText(getApplicationContext(), "CLICKED!!", Toast.LENGTH_SHORT).show();
+    }
 }
