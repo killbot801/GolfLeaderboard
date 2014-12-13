@@ -1,5 +1,6 @@
 package edu.utah.cs4962.golfleaderboard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -256,6 +257,7 @@ public class PlayerTournamentValues extends FragmentActivity
 
     public void launchLeaderboard(View view)
     {
-        Toast.makeText(getApplicationContext(), "CLICKED!!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), LeaderBoard.class);
+        startActivity(intent);
     }
 }
